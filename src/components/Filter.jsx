@@ -4,6 +4,7 @@ import IconPlusWhite from "../assets/icons/icon-plus-white.svg";
 import { fetchRegions } from "../http.js";
 import { useEffect, useState } from "react";
 import FilterRegion from "./FilterRegion.jsx";
+import FilterNumber from "./FilterNumber.jsx";
 
 export default function Filter() {
   const [regionsData, setRegionsData] = useState([]);
@@ -53,19 +54,33 @@ export default function Filter() {
           </FilterName>
           {modalOpen.region && <FilterRegion regionsData={regionsData} />}
         </div>
+        <div>
+          <FilterName
+            onClick={() => handleModal("priceCategory")}
+            clicked={modalOpen.priceCategory}
+          >
+            საფასო კატეგორია
+          </FilterName>
+          {modalOpen.priceCategory && (
+            <FilterNumber symbol="₾" title="ფასის მიხედვით" indicator="ფასი" />
+          )}
+        </div>
+        <div>
+          <FilterName
+            onClick={() => handleModal("area")}
+            clicked={modalOpen.area}
+          >
+            ფართობი
+          </FilterName>
+          {modalOpen.area && (
+            <FilterNumber
+              symbol="მ²"
+              title="ფართობის მიხედვით"
+              indicator="ფართობი"
+            />
+          )}
+        </div>
 
-        <FilterName
-          onClick={() => handleModal("priceCategory")}
-          clicked={modalOpen.priceCategory}
-        >
-          საფასო კატეგორია
-        </FilterName>
-        <FilterName
-          onClick={() => handleModal("area")}
-          clicked={modalOpen.area}
-        >
-          ფართობი
-        </FilterName>
         <FilterName
           onClick={() => handleModal("bedroomCount")}
           clicked={modalOpen.bedroomCount}
