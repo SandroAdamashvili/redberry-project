@@ -1,10 +1,11 @@
-import FilterName from "./FIlterName";
+import FilterName from "./FilterName.jsx";
 import IconPlusOrng from "../assets/icons/icon-plus-orng.svg";
 import IconPlusWhite from "../assets/icons/icon-plus-white.svg";
 import { fetchRegions } from "../http.js";
 import { useEffect, useState } from "react";
 import FilterRegion from "./FilterRegion.jsx";
 import FilterNumber from "./FilterNumber.jsx";
+import FilterBedroomCount from "./FilterBedroomCount.jsx";
 
 export default function Filter() {
   const [regionsData, setRegionsData] = useState([]);
@@ -80,13 +81,15 @@ export default function Filter() {
             />
           )}
         </div>
-
-        <FilterName
-          onClick={() => handleModal("bedroomCount")}
-          clicked={modalOpen.bedroomCount}
-        >
-          საძინებლის რაოდენობა
-        </FilterName>
+        <div>
+          <FilterName
+            onClick={() => handleModal("bedroomCount")}
+            clicked={modalOpen.bedroomCount}
+          >
+            საძინებლის რაოდენობა
+          </FilterName>
+          {modalOpen.bedroomCount && <FilterBedroomCount />}
+        </div>
       </div>
       <div className="flex flex-row gap-4">
         <button className="px-4 bg-[#F93B1D] text-white rounded-[10px] h-[47px] flex flex-row items-center gap-[2px] font-semibold">
