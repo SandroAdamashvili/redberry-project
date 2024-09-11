@@ -1,11 +1,12 @@
-import { useState } from "react";
-import Logo from "./assets/rdbr-logo.png";
 import "./App.css";
+import Filter from "./components/Filter.jsx";
+import Header from "./components/Header.jsx";
 
 function App() {
   return (
     <>
-      <img src={Logo} alt="logo" />
+      <Header />
+      <Filter />
     </>
   );
 }
