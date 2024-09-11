@@ -3,9 +3,16 @@ import IconPlusOrng from "../assets/icons/icon-plus-orng.svg";
 import IconPlusWhite from "../assets/icons/icon-plus-white.svg";
 import { fetchRegions } from "../http.js";
 import { useEffect, useState } from "react";
+import FilterRegion from "./FilterRegion.jsx";
 
 export default function Filter() {
   const [regionsData, setRegionsData] = useState([]);
+  const [modalOpen, setModalOpen] = useState({
+    region: false,
+    priceCategory: false,
+    area: false,
+    bedroomCount: false,
+  });
 
   useEffect(() => {
     async function fetchRegionsData() {
@@ -19,26 +26,52 @@ export default function Filter() {
     fetchRegionsData();
   }, []);
 
+  function handleModal(filterName) {
+    modalOpen[filterName]
+      ? setModalOpen((prevStates) => ({
+          ...prevStates,
+          [filterName]: false,
+        }))
+      : setModalOpen((prevStates) => ({
+          ...prevStates,
+          [filterName]: true,
+        }));
+  }
+
   console.log(regionsData);
+  console.log(modalOpen);
 
   return (
     <div className="w-[1596px] mt-[77px] ml-[162px] flex flex-row justify-between">
       <div className="flex flex-row gap-[24px] p-[6px] border-#DBDBDB border-[1px] rounded-[10px] w-fit">
         <div>
-          <FilterName>რეგიონი</FilterName>
-          <div className=" absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px]">
-            <h1>რეგიონის მიხედვით</h1>
-            <ul className="font-normal text-[14px]">
-              {regionsData.map((region) => {
-                return <li key={region.id}>{region.name}</li>;
-              })}
-            </ul>
-          </div>
+          <FilterName
+            onClick={() => handleModal("region")}
+            clicked={modalOpen.region}
+          >
+            რეგიონი
+          </FilterName>
+          {modalOpen.region && <FilterRegion regionsData={regionsData} />}
         </div>
 
-        <FilterName>საფასო კატეგორია</FilterName>
-        <FilterName>ფართობი</FilterName>
-        <FilterName>საძინებლის რაოდენობა</FilterName>
+        <FilterName
+          onClick={() => handleModal("priceCategory")}
+          clicked={modalOpen.priceCategory}
+        >
+          საფასო კატეგორია
+        </FilterName>
+        <FilterName
+          onClick={() => handleModal("area")}
+          clicked={modalOpen.area}
+        >
+          ფართობი
+        </FilterName>
+        <FilterName
+          onClick={() => handleModal("bedroomCount")}
+          clicked={modalOpen.bedroomCount}
+        >
+          საძინებლის რაოდენობა
+        </FilterName>
       </div>
       <div className="flex flex-row gap-4">
         <button className="px-4 bg-[#F93B1D] text-white rounded-[10px] h-[47px] flex flex-row items-center gap-[2px] font-semibold">
