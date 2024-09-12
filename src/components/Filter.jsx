@@ -72,7 +72,12 @@ export default function Filter() {
             საფასო კატეგორია
           </FilterName>
           {modalOpen.priceCategory && (
-            <FilterNumber symbol="₾" title="ფასის მიხედვით" indicator="ფასი" />
+            <FilterNumber
+              symbol="₾"
+              title="ფასის მიხედვით"
+              indicator="ფასი"
+              onSelect={() => handleModal("priceCategory")}
+            />
           )}
         </div>
         <div>
@@ -87,6 +92,7 @@ export default function Filter() {
               symbol="მ²"
               title="ფართობის მიხედვით"
               indicator="ფართობი"
+              onSelect={() => handleModal("area")}
             />
           )}
         </div>
