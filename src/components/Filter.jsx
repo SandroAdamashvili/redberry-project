@@ -103,7 +103,9 @@ export default function Filter() {
           >
             საძინებლის რაოდენობა
           </FilterName>
-          {modalOpen.bedroomCount && <FilterBedroomCount />}
+          {modalOpen.bedroomCount && (
+            <FilterBedroomCount onSelect={() => handleModal("bedroomCount")} />
+          )}
         </div>
       </div>
       <div className="flex flex-row gap-4">
