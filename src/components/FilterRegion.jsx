@@ -1,6 +1,6 @@
 export default function FilterRegion({ regionsData }) {
   return (
-    <div className=" absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px]">
+    <div className=" absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white">
       <h1 className="mb-[24px]">რეგიონის მიხედვით</h1>
       <ul className="font-normal text-[14px] h-[128px] grid grid-cols-3 gap-x-[50px] mb-8">
         {regionsData.map((region) => {

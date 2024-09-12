@@ -1,6 +1,6 @@
 export default function FilterNumber({ title, symbol, indicator }) {
   return (
-    <div className="absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px]">
+    <div className="absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white">
       <h1 className="mb-[24px]">{title}</h1>
       <div className="flex flex-row w-[325px] gap-[15px] mb-4">
         <div className="p-[10px] border border-[#808A93] rounded-md w-1/2 flex flex-row">

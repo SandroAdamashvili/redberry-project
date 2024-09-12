@@ -1,6 +1,6 @@
 export default function FilterBedroomCount() {
   return (
-    <div className="absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px]">
+    <div className="absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white">
       <h1 className="mb-6">საძინებლების რაოდენობა</h1>
       <input
         type="number"
