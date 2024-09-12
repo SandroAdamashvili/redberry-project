@@ -29,19 +29,23 @@ export default function Filter() {
   }, []);
 
   function handleModal(filterName) {
-    modalOpen[filterName]
-      ? setModalOpen((prevStates) => ({
-          ...prevStates,
-          [filterName]: false,
-        }))
-      : setModalOpen((prevStates) => ({
-          ...prevStates,
-          [filterName]: true,
-        }));
+    setModalOpen((prevStates) => {
+      const newState = {};
+
+      for (const key in prevStates) {
+        if (key === filterName) {
+          newState[key] = !prevStates[filterName];
+        } else {
+          newState[key] = false;
+        }
+      }
+
+      return newState;
+    });
   }
 
-  console.log(regionsData);
-  console.log(modalOpen);
+  // console.log(regionsData);
+  // console.log(modalOpen);
 
   return (
     <div className="w-[1596px] mt-[77px] ml-[162px] flex flex-row justify-between">

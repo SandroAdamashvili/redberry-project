@@ -1,3 +1,5 @@
+const token = '9cfd634c-fae0-4247-8176-7ed68486ad53';
+
 export async function fetchRegions() {
     const response = await fetch("https://api.real-estate-manager.redberryinternship.ge/api/regions")
     const regions = response.json();
@@ -6,4 +8,20 @@ export async function fetchRegions() {
     }
 
     return regions;
+}
+
+export async function fetchRealEstates() {
+    const response = await fetch("https://api.real-estate-manager.redberryinternship.ge/api/real-estates", {
+        method: 'GET',
+        headers: {
+            'accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    const realEstates = response.json();
+    if (!response.ok) {
+        throw new Error("Failed to fetch data")
+    }
+
+    return realEstates;
 }
