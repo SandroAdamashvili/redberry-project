@@ -1,5 +1,6 @@
 import "./App.css";
 import Filter from "./components/Filter.jsx";
+import FilterValues from "./components/FilterValues.jsx";
 import Header from "./components/Header.jsx";
 import RealEstates from "./components/RealEstates.jsx";
 

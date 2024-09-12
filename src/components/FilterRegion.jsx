@@ -1,6 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function FilterRegion({ regionsData, onSelect }) {
+  // const divRef = useRef(null);
+
+  // useEffect(() => {
+  //   function handleClickOutside(event) {
+  //     if (divRef.current && !divRef.current.contains(event.target)) {
+  //       onSelect();
+  //     }
+  //   }
+
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [divRef]);
+
   function loadStateFromLocalStorage() {
     const savedState = localStorage.getItem("checkedRegions");
     return savedState ? JSON.parse(savedState) : {};
@@ -23,10 +38,13 @@ export default function FilterRegion({ regionsData, onSelect }) {
     }));
   };
 
-  console.log(checkedRegions);
+  // console.log(checkedRegions);
 
   return (
-    <div className=" absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white">
+    <div
+      className=" absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white"
+      // ref={divRef}
+    >
       <h1 className="mb-[24px]">რეგიონის მიხედვით</h1>
       <ul className="font-normal text-[14px] h-[128px] grid grid-cols-3 gap-x-[50px] mb-8">
         {regionsData.map((region) => {
