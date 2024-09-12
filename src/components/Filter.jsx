@@ -57,7 +57,12 @@ export default function Filter() {
           >
             რეგიონი
           </FilterName>
-          {modalOpen.region && <FilterRegion regionsData={regionsData} />}
+          {modalOpen.region && (
+            <FilterRegion
+              regionsData={regionsData}
+              onSelect={() => handleModal("region")}
+            />
+          )}
         </div>
         <div>
           <FilterName
