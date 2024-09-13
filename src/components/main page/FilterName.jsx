@@ -1,5 +1,5 @@
-import IconDown from "../assets/icons/icon-chevron-down.svg";
-import IconUp from "../assets/icons/icon-chevron-up.svg";
+import IconDown from "../../assets/icons/icon-chevron-down.svg";
+import IconUp from "../../assets/icons/icon-chevron-up.svg";
 
 export default function FilterName({ children, clicked, ...props }) {
   const cssClass =

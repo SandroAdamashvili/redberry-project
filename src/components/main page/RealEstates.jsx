@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { fetchRealEstates } from "../http.js";
-import MapIcon from "../assets/icons/location-marker.svg";
-import BedIcon from "../assets/icons/bed.svg";
-import areaIcon from "../assets/icons/vector.svg";
-import ZipCodeIcon from "../assets/icons/zip-code.svg";
+import { fetchRealEstates } from "../../http.js";
+import MapIcon from "../../assets/icons/location-marker.svg";
+import BedIcon from "../../assets/icons/bed.svg";
+import areaIcon from "../../assets/icons/vector.svg";
+import ZipCodeIcon from "../../assets/icons/zip-code.svg";
 
 export default function RealEstates() {
   const [realEstateData, setRealEstateData] = useState([]);

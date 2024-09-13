@@ -12,14 +12,17 @@ export default function FilterValues() {
     return savedState ? JSON.parse(savedState) : null;
   }
 
+  const regionsData = loadDataFromLocalStorage("checkedRegions") || {};
+  const priceRangeData = loadDataFromLocalStorage("ფასი");
+
   useEffect(() => {
-    setRegions(loadDataFromLocalStorage("checkedRegions") || {});
     setPriceRange(loadDataFromLocalStorage("ფასი"));
     setAreaRange(loadDataFromLocalStorage("ფართობი"));
     setBedrooms(loadDataFromLocalStorage("bedroomCount"));
   }, []);
 
   function handleRemoveRegion(name) {
+    setRegions(regionsData);
     setRegions((prevRegions) => {
       const updatedRegions = { ...prevRegions, [name]: false };
       localStorage.setItem("checkedRegions", JSON.stringify(updatedRegions));
@@ -28,6 +31,7 @@ export default function FilterValues() {
   }
 
   function handleRemoveFilter(name) {
+    setPriceRange(priceRangeData);
     localStorage.removeItem(name);
     if (name === "ფასი") setPriceRange(null);
     if (name === "ფართობი") setAreaRange(null);
@@ -46,9 +50,9 @@ export default function FilterValues() {
     <div className="flex flex-row mx-[162px] mt-4 gap-2">
       <ul className="flex flex-row gap-2">
         {regions &&
-          Object.keys(regions).map((region) => {
+          Object.keys(regionsData).map((region) => {
             return (
-              regions[region] && (
+              regionsData[region] && (
                 <FilterItem
                   filter={region}
                   key={region}
@@ -57,9 +61,9 @@ export default function FilterValues() {
               )
             );
           })}
-        {priceRange && (
+        {priceRangeData && (
           <FilterItem
-            filter={`${priceRange.from}₾ - ${priceRange.to}₾`}
+            filter={`${priceRangeData.from}₾ - ${priceRangeData.to}₾`}
             onRemove={() => handleRemoveFilter("ფასი")}
           />
         )}

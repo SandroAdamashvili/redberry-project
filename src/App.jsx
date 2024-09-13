@@ -1,15 +1,16 @@
 import "./App.css";
-import Filter from "./components/Filter.jsx";
-import FilterValues from "./components/FilterValues.jsx";
-import Header from "./components/Header.jsx";
-import RealEstates from "./components/RealEstates.jsx";
+import RealEstateForm from "./components/add listing page/RealEstateForm.jsx";
+import Filter from "./components/main page/Filter.jsx";
+import Header from "./components/main page/Header.jsx";
+import RealEstates from "./components/main page/RealEstates.jsx";
 
 function App() {
   return (
     <>
       <Header />
-      <Filter />
-      <RealEstates />
+      <RealEstateForm />
+      {/* <Filter />
+      <RealEstates /> */}
     </>
   );
 }

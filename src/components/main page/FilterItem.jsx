@@ -1,4 +1,4 @@
-import XIcon from "../assets/icons/icon-x.svg";
+import XIcon from "../../assets/icons/icon-x.svg";
 
 export default function ({ filter, onRemove, ...props }) {
   return (

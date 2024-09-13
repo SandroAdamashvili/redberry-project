@@ -1,7 +1,7 @@
 import FilterName from "./FilterName.jsx";
-import IconPlusOrng from "../assets/icons/icon-plus-orng.svg";
-import IconPlusWhite from "../assets/icons/icon-plus-white.svg";
-import { fetchRegions } from "../http.js";
+import IconPlusOrng from "../../assets/icons/icon-plus-orng.svg";
+import IconPlusWhite from "../../assets/icons/icon-plus-white.svg";
+import { fetchRegions } from "../../http.js";
 import { useEffect, useState } from "react";
 import FilterRegion from "./FilterRegion.jsx";
 import FilterNumber from "./FilterNumber.jsx";

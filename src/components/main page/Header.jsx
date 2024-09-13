@@ -1,4 +1,4 @@
-import Logo from "../assets/rdbr-logo.png";
+import Logo from "../../assets/rdbr-logo.png";
 
 export default function Header() {
   return (
