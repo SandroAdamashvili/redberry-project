@@ -9,7 +9,8 @@ export default function RealEstateForm() {
   const [selectedRadio, setSelectedRadio] = useState("forSale");
   const [regionsData, setRegionsData] = useState([]);
   const [citiesData, setCitiesData] = useState([]);
-  const [selectedRegion, setSelectedRegion] = useState("აირჩიე");
+  const [selectedRegion, setSelectedRegion] = useState("აირჩიე რეგიონი");
+  const [selectedcity, setSelectedCity] = useState("აირჩიე ქალაქი");
 
   useEffect(() => {
     async function fetchRegionsData() {
@@ -45,17 +46,22 @@ export default function RealEstateForm() {
     setSelectedRegion(value);
   }
 
-  console.log(selectedRegion);
+  function handlecityChange(value) {
+    setSelectedCity(value);
+  }
+
+  console.log("selected region", selectedRegion);
+  console.log("selected city", selectedcity);
 
   return (
-    <div className="m-auto w-[790px] flex flex-col justify-center mt-[62px]">
+    <div className="mx-auto w-[790px] flex flex-col justify-center my-[62px]">
       <h1 className=" text-center mb-[61px] text-[32px] text-[#021526] font-medium">
         ლისტინგის დამატება
       </h1>
       <form>
         <div>
           <h2 className="mb-2 text-[16px] font-medium text-[#1A1A1F]">
-            გარიგების ტიპი
+            გარიგების ტიპი *
           </h2>
           <div className="flex flex-row gap-[84px] text-[14px]">
             <InputRadio
@@ -73,16 +79,60 @@ export default function RealEstateForm() {
         <div className="mt-[80px] flex flex-col gap-[22px]">
           <h2 className="text-[16px] font-medium text-[#1A1A1F]">მდებარეობა</h2>
           <div className="flex flex-row w-full gap-5">
-            <Input title="მისამართი *" validation="მინიმუმ 2 სიმბოლო" />
-            <Input title="საფოსტო ინდექსი *" validation="მხოლოდ რიცხვები" />
+            <Input
+              title="მისამართი *"
+              validationText="მინიმუმ 2 სიმბოლო"
+              inputType="text"
+            />
+            <Input
+              title="საფოსტო ინდექსი *"
+              validationText="მხოლოდ რიცხვები"
+              inputType="number"
+            />
           </div>
           <div className="flex flex-row w-full gap-5">
             <InputSelect
-              title="რეგიონი"
+              title="რეგიონი *"
               data={regionsData}
               onSelect={handleRegionChange}
             />
+            {selectedRegion !== "აირჩიე რეგიონი" && (
+              <InputSelect
+                title="ქალაქი *"
+                data={citiesData.filter(
+                  (city) => city["region_id"] == selectedRegion
+                )}
+                onSelect={handlecityChange}
+              />
+            )}
           </div>
+        </div>
+        <div className="mt-[80px] flex flex-col gap-[22px]">
+          <h2 className="text-[16px] font-medium text-[#1A1A1F]">
+            ბინის დეტალები
+          </h2>
+          <div className="flex flex-row w-full gap-5">
+            <Input
+              title="ფასი *"
+              validationText="მხოლოდ რიცხვები"
+              inputType="number"
+            />
+            <Input
+              title="ფართობი *"
+              validationText="მხოლოდ რიცხვები"
+              inputType="number"
+            />
+          </div>
+          <Input
+            title="საძინებლების რაოდენობა *"
+            validationText="მხოლოდ რიცხვები"
+            inputType="number"
+          />
+          <Input
+            title="აღწერა *"
+            validationText="მინიმუმ ხუთი სიტყვა"
+            inputType="textarea"
+          />
         </div>
       </form>
     </div>

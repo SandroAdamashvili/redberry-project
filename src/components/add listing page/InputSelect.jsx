@@ -17,11 +17,11 @@ export default function InputSelect({ title, data, onSelect }) {
         className=" border border-[#808A93] rounded-md h-[42px] w-[384px] focus:outline-none p-[10px]"
         onChange={handleRegionChange}
       >
-        <option>აირჩიე</option>
-        {data.map((region) => {
+        <option>აირჩიე {title}</option>
+        {data.map((element) => {
           return (
-            <option value={region.id} key={region.id}>
-              {region.name}
+            <option value={element.id} key={element.id}>
+              {element.name}
             </option>
           );
         })}
