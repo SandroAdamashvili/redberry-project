@@ -6,9 +6,9 @@ export default {
   ],
   theme: {
     extend: {
-      // fontFamily: {
-      //   fira: ['"Fira Go"', 'sans-serif'],
-      // },
+      fontFamily: {
+        fira: ['"Fira Go"', 'sans-serif'],
+      },
     },
   },
   plugins: [],

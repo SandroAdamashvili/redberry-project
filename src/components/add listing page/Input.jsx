@@ -1,25 +1,41 @@
 import Tick from "../../assets/icons/tick.svg";
 
-export default function Input({ title, validationText, inputType }) {
+export default function Input({
+  title,
+  validationText,
+  inputType,
+  onInputChange,
+  inputName,
+  validationFn,
+}) {
+  function handleChange(event) {
+    onInputChange(inputName, event.target.value, validationFn);
+  }
+
   return (
     <div className="flex flex-col w-full">
-      <label htmlFor="input" className="text-[14px] font-medium text-[#021526]">
+      <label
+        htmlFor={inputName}
+        className="text-[14px] font-medium text-[#021526]"
+      >
         {title}
       </label>
       {inputType === "textarea" ? (
         <textarea
-          name="input"
+          name={inputName}
           className=" border border-[#808A93] rounded-md h-[135px] w-full focus:outline-none p-[10px]"
+          onChange={handleChange}
         ></textarea>
       ) : (
         <input
           type={inputType}
-          name="input"
+          name={inputName}
           className=" border border-[#808A93] rounded-md h-[42px] w-[384px] focus:outline-none p-[10px]"
+          onChange={handleChange}
         />
       )}
       <label
-        htmlFor="input"
+        htmlFor={inputName}
         className="text-[14px] font-normal text-[#021526] flex flex-row gap-1"
       >
         <img src={Tick} alt="tick icon" />

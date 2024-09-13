@@ -1,0 +1,27 @@
+export function minTwoSymbols(value) {
+    return value.length >= 2;
+}
+
+export function onlyNumbers(value) {
+    if (value.length === 0) {
+        return false;
+      }
+
+    const number = Number(value);
+    return !isNaN(number);
+}
+
+export function onlyIntegers(value) {
+    if (value.length === 0) {
+        return false;
+      }
+
+    const number = Number(value);
+    return Number.isInteger(number);
+}
+
+export function minFiveWords(value) {
+    const wordsArr = value.trim().split(' ');
+    const newArr = wordsArr.filter(word => word.length > 0)
+    return newArr.length >= 5;
+}

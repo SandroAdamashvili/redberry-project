@@ -1,16 +1,40 @@
 import { useState, useEffect } from "react";
-import Tick from "../../assets/icons/tick.svg";
 import Input from "./Input.jsx";
 import InputSelect from "./InputSelect.jsx";
 import InputRadio from "./inputRadio.jsx";
 import { fetchcities, fetchRegions } from "../../http.js";
+import {
+  minFiveWords,
+  minTwoSymbols,
+  onlyIntegers,
+  onlyNumbers,
+} from "../../validation.js";
 
 export default function RealEstateForm() {
-  const [selectedRadio, setSelectedRadio] = useState("forSale");
   const [regionsData, setRegionsData] = useState([]);
   const [citiesData, setCitiesData] = useState([]);
-  const [selectedRegion, setSelectedRegion] = useState("აირჩიე რეგიონი");
-  const [selectedcity, setSelectedCity] = useState("აირჩიე ქალაქი");
+  const [inputValue, setInputValue] = useState({
+    selectedRadio: "forSale",
+    address: "",
+    post_index: null,
+    selectedRegion: "აირჩიე რეგიონი",
+    selectedcity: "აირჩიე ქალაქი",
+    price: null,
+    area: null,
+    bedrooms: null,
+    description: "",
+  });
+
+  const [valueError, setValueError] = useState({
+    address: null,
+    post_index: null,
+    region: null,
+    city: null,
+    price: null,
+    area: null,
+    bedrooms: null,
+    description: null,
+  });
 
   useEffect(() => {
     async function fetchRegionsData() {
@@ -38,23 +62,44 @@ export default function RealEstateForm() {
 
   console.log(citiesData);
 
-  function handleRadioChange(value) {
-    setSelectedRadio(value);
-  }
-
   function handleRegionChange(value) {
-    setSelectedRegion(value);
+    setInputValue((prevValues) => ({
+      ...prevValues,
+      selectedRegion: value,
+    }));
   }
 
   function handlecityChange(value) {
-    setSelectedCity(value);
+    setInputValue((prevValues) => ({
+      ...prevValues,
+      selectedcity: value,
+    }));
   }
 
-  console.log("selected region", selectedRegion);
-  console.log("selected city", selectedcity);
+  function handleValueChange(name, value) {
+    setInputValue((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+  }
+
+  function handleValidation(name, enteredValue, validationFn) {
+    setValueError((prevValues) => {
+      const valueError = validationFn(enteredValue);
+      return {
+        ...prevValues,
+        [name]: valueError,
+      };
+    });
+  }
+
+  console.log("input validation", valueError);
+
+  console.log("selected region", inputValue.selectedRegion);
+  console.log("selected city", inputValue.selectedcity);
 
   return (
-    <div className="mx-auto w-[790px] flex flex-col justify-center my-[62px]">
+    <div className="mx-auto w-[790px] flex flex-col justify-center my-[62px] font-fira">
       <h1 className=" text-center mb-[61px] text-[32px] text-[#021526] font-medium">
         ლისტინგის დამატება
       </h1>
@@ -66,13 +111,13 @@ export default function RealEstateForm() {
           <div className="flex flex-row gap-[84px] text-[14px]">
             <InputRadio
               title="იყიდება"
-              onChecked={selectedRadio === "forSale"}
-              onSelect={() => handleRadioChange("forSale")}
+              onChecked={inputValue.selectedRadio === "forSale"}
+              onSelect={() => handleValueChange("selectedRadio", "forSale")}
             />
             <InputRadio
               title="ქირავდება"
-              onChecked={selectedRadio === "forRent"}
-              onSelect={() => handleRadioChange("forRent")}
+              onChecked={inputValue.selectedRadio === "forRent"}
+              onSelect={() => handleValueChange("selectedRadio", "forRent")}
             />
           </div>
         </div>
@@ -83,24 +128,30 @@ export default function RealEstateForm() {
               title="მისამართი *"
               validationText="მინიმუმ 2 სიმბოლო"
               inputType="text"
+              onInputChange={handleValidation}
+              inputName="address"
+              validationFn={minTwoSymbols}
             />
             <Input
               title="საფოსტო ინდექსი *"
               validationText="მხოლოდ რიცხვები"
-              inputType="number"
+              inputType="text"
+              inputName="post_index"
+              onInputChange={handleValidation}
+              validationFn={onlyNumbers}
             />
           </div>
           <div className="flex flex-row w-full gap-5">
             <InputSelect
-              title="რეგიონი *"
+              title="რეგიონი"
               data={regionsData}
               onSelect={handleRegionChange}
             />
-            {selectedRegion !== "აირჩიე რეგიონი" && (
+            {inputValue.selectedRegion !== "აირჩიე რეგიონი" && (
               <InputSelect
-                title="ქალაქი *"
+                title="ქალაქი"
                 data={citiesData.filter(
-                  (city) => city["region_id"] == selectedRegion
+                  (city) => city["region_id"] == inputValue.selectedRegion
                 )}
                 onSelect={handlecityChange}
               />
@@ -115,23 +166,35 @@ export default function RealEstateForm() {
             <Input
               title="ფასი *"
               validationText="მხოლოდ რიცხვები"
-              inputType="number"
+              inputType="text"
+              inputName="price"
+              onInputChange={handleValidation}
+              validationFn={onlyNumbers}
             />
             <Input
               title="ფართობი *"
               validationText="მხოლოდ რიცხვები"
-              inputType="number"
+              inputType="text"
+              inputName="area"
+              onInputChange={handleValidation}
+              validationFn={onlyNumbers}
             />
           </div>
           <Input
             title="საძინებლების რაოდენობა *"
             validationText="მხოლოდ რიცხვები"
-            inputType="number"
+            inputType="text"
+            inputName="bedrooms"
+            onInputChange={handleValidation}
+            validationFn={onlyIntegers}
           />
           <Input
             title="აღწერა *"
             validationText="მინიმუმ ხუთი სიტყვა"
             inputType="textarea"
+            inputName="description"
+            onInputChange={handleValidation}
+            validationFn={minFiveWords}
           />
         </div>
       </form>
