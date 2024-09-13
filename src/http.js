@@ -10,6 +10,16 @@ export async function fetchRegions() {
     return regions;
 }
 
+export async function fetchcities() {
+    const response = await fetch("https://api.real-estate-manager.redberryinternship.ge/api/cities")
+    const cities = response.json();
+    if (!response.ok) {
+        throw new Error("Failed to fetch data")
+    }
+
+    return cities;
+}
+
 export async function fetchRealEstates() {
     const response = await fetch("https://api.real-estate-manager.redberryinternship.ge/api/real-estates", {
         method: 'GET',
