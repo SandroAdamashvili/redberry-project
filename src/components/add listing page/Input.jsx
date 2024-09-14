@@ -11,6 +11,7 @@ export default function Input({
 }) {
   function handleChange(event) {
     onInputChange(inputName, event.target.value, validationFn);
+    localStorage.setItem(inputName, event.target.value);
   }
 
   let labelCss = "text-[14px] font-normal flex flex-row gap-1 ";
@@ -44,6 +45,11 @@ export default function Input({
           name={inputName}
           className={txtAreaCss}
           onChange={handleChange}
+          value={
+            localStorage.getItem(inputName) === null
+              ? ""
+              : localStorage.getItem(inputName)
+          }
         ></textarea>
       ) : (
         <input
@@ -51,6 +57,11 @@ export default function Input({
           name={inputName}
           className={inputCss}
           onChange={handleChange}
+          value={
+            localStorage.getItem(inputName) === null
+              ? ""
+              : localStorage.getItem(inputName)
+          }
         />
       )}
       <label htmlFor={inputName} className={labelCss}>

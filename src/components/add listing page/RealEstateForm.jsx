@@ -1,31 +1,32 @@
 import { useState, useEffect, useRef } from "react";
-import UploadIcon from "../../assets/icons/plus-circle.svg";
-import RemoveIcon from "../../assets/icons/remove-icon.svg";
 import Input from "./Input.jsx";
 import InputSelect from "./InputSelect.jsx";
 import InputRadio from "./inputRadio.jsx";
-import { fetchcities, fetchRegions } from "../../http.js";
+import { fetchAgents, fetchcities, fetchRegions } from "../../http.js";
 import {
   minFiveWords,
   minTwoSymbols,
   onlyIntegers,
   onlyNumbers,
 } from "../../validation.js";
+import ImageUpload from "./ImageUpload.jsx";
 
 export default function RealEstateForm() {
   const imgRef = useRef();
   const [imgValue, setImgValue] = useState(null);
   const [regionsData, setRegionsData] = useState([]);
   const [citiesData, setCitiesData] = useState([]);
+  const [agentsData, setAgentsData] = useState([]);
   const [inputValue, setInputValue] = useState({
     selectedRadio: "forSale",
     address: "",
-    post_index: null,
+    post_index: "",
     selectedRegion: "აირჩიე რეგიონი",
     selectedcity: "აირჩიე ქალაქი",
-    price: null,
-    area: null,
-    bedrooms: null,
+    selectedAgent: "აირჩიე აგენტი",
+    price: "",
+    area: "",
+    bedrooms: "",
     description: "",
     selectedFile: null,
   });
@@ -65,21 +66,19 @@ export default function RealEstateForm() {
     fetchCitiesData();
   }, []);
 
+  useEffect(() => {
+    async function fetchAgentsData() {
+      try {
+        const agents = await fetchAgents();
+        setAgentsData(agents);
+      } catch (error) {
+        console.error("Error fetching agents data:", error);
+      }
+    }
+    fetchAgentsData();
+  }, []);
+
   console.log(citiesData);
-
-  function handleRegionChange(value) {
-    setInputValue((prevValues) => ({
-      ...prevValues,
-      selectedRegion: value,
-    }));
-  }
-
-  function handlecityChange(value) {
-    setInputValue((prevValues) => ({
-      ...prevValues,
-      selectedcity: value,
-    }));
-  }
 
   function handleValueChange(name, value) {
     setInputValue((prevValues) => ({
@@ -135,9 +134,7 @@ export default function RealEstateForm() {
 
   console.log("input validation", valueError);
 
-  console.log("selected region", inputValue.selectedRegion);
-  console.log("selected city", inputValue.selectedcity);
-  console.log("file", inputValue.selectedFile);
+  console.log(inputValue);
 
   return (
     <div className="mx-auto w-[790px] flex flex-col justify-center my-[62px] font-fira">
@@ -186,17 +183,21 @@ export default function RealEstateForm() {
           </div>
           <div className="flex flex-row w-full gap-5">
             <InputSelect
+              inputName="selectedRegion"
+              label="რეგიონი"
               title="რეგიონი"
               data={regionsData}
-              onSelect={handleRegionChange}
+              onSelect={handleValueChange}
             />
             {inputValue.selectedRegion !== "აირჩიე რეგიონი" && (
               <InputSelect
+                inputName="selectedcity"
+                label="ქალაქი"
                 title="ქალაქი"
                 data={citiesData.filter(
                   (city) => city["region_id"] == inputValue.selectedRegion
                 )}
-                onSelect={handlecityChange}
+                onSelect={handleValueChange}
               />
             )}
           </div>
@@ -243,45 +244,25 @@ export default function RealEstateForm() {
             validationFn={minFiveWords}
             error={valueError.description}
           />
-          <div className="flex flex-col w-full">
-            <label
-              htmlFor="imgUpload"
-              className="text-[14px] font-medium text-[#021526]"
-            >
-              ატვირთეთ ფოტო *
-            </label>
-            {inputValue.selectedFile === null && (
-              <input
-                type="file"
-                className=" hidden"
-                ref={imgRef}
-                onChange={handleImgChange}
-              />
-            )}
-
-            <button
-              className="w-full border border-dashed border-[#2D3648] h-[120px] rounded-lg flex items-center justify-center"
-              onClick={onChooseFile}
-            >
-              {inputValue.selectedFile ? (
-                // inputValue.selectedFile.name
-                <div className="relative">
-                  <img
-                    src={"data:image/jpeg;base64," + btoa(imgValue)}
-                    alt="image"
-                    className="w-[92px] h-[82px] rounded-[4px]"
-                  />
-                  <img
-                    src={RemoveIcon}
-                    alt="remove icon"
-                    className="absolute top-[65px] left-[75px]"
-                    onClick={onRemove}
-                  />
-                </div>
-              ) : (
-                <img src={UploadIcon} alt="upload icon" />
-              )}
-            </button>
+          <ImageUpload
+            ref={imgRef}
+            selectedFile={inputValue.selectedFile}
+            handleImgChange={handleImgChange}
+            onChooseFile={onChooseFile}
+            imgValue={imgValue}
+            onRemove={onRemove}
+          />
+        </div>
+        <div className="mt-[80px] flex flex-col gap-[22px]">
+          <h2 className="text-[16px] font-medium text-[#1A1A1F]">აგენტი</h2>
+          <div className="flex flex-row w-full gap-5">
+            <InputSelect
+              inputName="selectedAgent"
+              label="აირჩიე"
+              title="აგენტი"
+              data={agentsData}
+              onSelect={handleValueChange}
+            />
           </div>
         </div>
       </form>

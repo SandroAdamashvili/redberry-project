@@ -20,6 +20,22 @@ export async function fetchcities() {
     return cities;
 }
 
+export async function fetchAgents() {
+    const response = await fetch("https://api.real-estate-manager.redberryinternship.ge/api/agents", {
+        method: 'GET',
+        headers: {
+            'accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    const agents = response.json();
+    if (!response.ok) {
+        throw new Error("Failed to fetch data")
+    }
+
+    return agents;
+}
+
 export async function fetchRealEstates() {
     const response = await fetch("https://api.real-estate-manager.redberryinternship.ge/api/real-estates", {
         method: 'GET',
