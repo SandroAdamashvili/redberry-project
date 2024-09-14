@@ -8,6 +8,7 @@ export default function InputSelect({
   function handleRegionChange(event) {
     const value = event.target.value;
     onSelect(inputName, value);
+    localStorage.setItem(inputName, value);
   }
 
   return (

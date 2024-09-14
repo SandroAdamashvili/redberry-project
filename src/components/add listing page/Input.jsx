@@ -4,13 +4,15 @@ export default function Input({
   title,
   validationText,
   inputType,
-  onInputChange,
+  onValidation,
   inputName,
   validationFn,
   error,
+  onInputChange,
 }) {
   function handleChange(event) {
-    onInputChange(inputName, event.target.value, validationFn);
+    onValidation(inputName, event.target.value, validationFn);
+    onInputChange(inputName, event.target.value);
     localStorage.setItem(inputName, event.target.value);
   }
 

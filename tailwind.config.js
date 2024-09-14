@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        fira: ['"Fira Go"'],
+        fira: ['"Fira Go", sans-serif;'],
       },
     },
   },

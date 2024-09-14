@@ -85,6 +85,7 @@ export default function RealEstateForm() {
       ...prevValues,
       [name]: value,
     }));
+    localStorage.setItem(name, value);
   }
 
   function handleValidation(name, enteredValue, validationFn) {
@@ -166,19 +167,21 @@ export default function RealEstateForm() {
               title="მისამართი *"
               validationText="მინიმუმ 2 სიმბოლო"
               inputType="text"
-              onInputChange={handleValidation}
+              onValidation={handleValidation}
               inputName="address"
               validationFn={minTwoSymbols}
               error={valueError.address}
+              onInputChange={handleValueChange}
             />
             <Input
               title="საფოსტო ინდექსი *"
               validationText="მხოლოდ რიცხვები"
               inputType="text"
               inputName="post_index"
-              onInputChange={handleValidation}
+              onValidation={handleValidation}
               validationFn={onlyNumbers}
               error={valueError.post_index}
+              onInputChange={handleValueChange}
             />
           </div>
           <div className="flex flex-row w-full gap-5">
@@ -212,18 +215,20 @@ export default function RealEstateForm() {
               validationText="მხოლოდ რიცხვები"
               inputType="text"
               inputName="price"
-              onInputChange={handleValidation}
+              onValidation={handleValidation}
               validationFn={onlyNumbers}
               error={valueError.price}
+              onInputChange={handleValueChange}
             />
             <Input
               title="ფართობი *"
               validationText="მხოლოდ რიცხვები"
               inputType="text"
               inputName="area"
-              onInputChange={handleValidation}
+              onValidation={handleValidation}
               validationFn={onlyNumbers}
               error={valueError.area}
+              onInputChange={handleValueChange}
             />
           </div>
           <Input
@@ -231,18 +236,20 @@ export default function RealEstateForm() {
             validationText="მხოლოდ რიცხვები"
             inputType="text"
             inputName="bedrooms"
-            onInputChange={handleValidation}
+            onValidation={handleValidation}
             validationFn={onlyIntegers}
             error={valueError.bedrooms}
+            onInputChange={handleValueChange}
           />
           <Input
             title="აღწერა *"
             validationText="მინიმუმ ხუთი სიტყვა"
             inputType="textarea"
             inputName="description"
-            onInputChange={handleValidation}
+            onValidation={handleValidation}
             validationFn={minFiveWords}
             error={valueError.description}
+            onInputChange={handleValueChange}
           />
           <ImageUpload
             ref={imgRef}
