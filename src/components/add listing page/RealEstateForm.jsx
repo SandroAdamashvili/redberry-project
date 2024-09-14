@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import UploadIcon from "../../assets/icons/plus-circle.svg";
+import RemoveIcon from "../../assets/icons/remove-icon.svg";
 import Input from "./Input.jsx";
 import InputSelect from "./InputSelect.jsx";
 import InputRadio from "./inputRadio.jsx";
@@ -11,6 +13,8 @@ import {
 } from "../../validation.js";
 
 export default function RealEstateForm() {
+  const imgRef = useRef();
+  const [imgValue, setImgValue] = useState(null);
   const [regionsData, setRegionsData] = useState([]);
   const [citiesData, setCitiesData] = useState([]);
   const [inputValue, setInputValue] = useState({
@@ -23,6 +27,7 @@ export default function RealEstateForm() {
     area: null,
     bedrooms: null,
     description: "",
+    selectedFile: null,
   });
 
   const [valueError, setValueError] = useState({
@@ -88,22 +93,58 @@ export default function RealEstateForm() {
       const valueError = validationFn(enteredValue);
       return {
         ...prevValues,
-        [name]: valueError,
+        [name]: !valueError,
       };
     });
+  }
+
+  function handleImgChange(event) {
+    event.preventDefault();
+    if (event.target.files && event.target.files.length > 0) {
+      setInputValue((prevValues) => ({
+        ...prevValues,
+        selectedFile: event.target.files[0],
+      }));
+      let reader = new FileReader();
+      reader.onloadend = function () {
+        // setImgValue(reader.result);
+        // console.log("Encoded Base 64 File String:", reader.result);
+        let data = reader.result.split(",")[1];
+        let binaryBlob = atob(data);
+        setImgValue(binaryBlob);
+        console.log("Encoded Binary File String:", binaryBlob);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+  }
+
+  function onChooseFile(event) {
+    event.preventDefault();
+    if (inputValue.selectedFile === null) {
+      imgRef.current.click();
+    }
+  }
+
+  function onRemove() {
+    setInputValue((prevValues) => ({
+      ...prevValues,
+      selectedFile: null,
+    }));
+    setImgValue(null);
   }
 
   console.log("input validation", valueError);
 
   console.log("selected region", inputValue.selectedRegion);
   console.log("selected city", inputValue.selectedcity);
+  console.log("file", inputValue.selectedFile);
 
   return (
     <div className="mx-auto w-[790px] flex flex-col justify-center my-[62px] font-fira">
       <h1 className=" text-center mb-[61px] text-[32px] text-[#021526] font-medium">
         ლისტინგის დამატება
       </h1>
-      <form>
+      <form className="mb-[87px]">
         <div>
           <h2 className="mb-2 text-[16px] font-medium text-[#1A1A1F]">
             გარიგების ტიპი *
@@ -131,6 +172,7 @@ export default function RealEstateForm() {
               onInputChange={handleValidation}
               inputName="address"
               validationFn={minTwoSymbols}
+              error={valueError.address}
             />
             <Input
               title="საფოსტო ინდექსი *"
@@ -139,6 +181,7 @@ export default function RealEstateForm() {
               inputName="post_index"
               onInputChange={handleValidation}
               validationFn={onlyNumbers}
+              error={valueError.post_index}
             />
           </div>
           <div className="flex flex-row w-full gap-5">
@@ -170,6 +213,7 @@ export default function RealEstateForm() {
               inputName="price"
               onInputChange={handleValidation}
               validationFn={onlyNumbers}
+              error={valueError.price}
             />
             <Input
               title="ფართობი *"
@@ -178,6 +222,7 @@ export default function RealEstateForm() {
               inputName="area"
               onInputChange={handleValidation}
               validationFn={onlyNumbers}
+              error={valueError.area}
             />
           </div>
           <Input
@@ -187,6 +232,7 @@ export default function RealEstateForm() {
             inputName="bedrooms"
             onInputChange={handleValidation}
             validationFn={onlyIntegers}
+            error={valueError.bedrooms}
           />
           <Input
             title="აღწერა *"
@@ -195,7 +241,48 @@ export default function RealEstateForm() {
             inputName="description"
             onInputChange={handleValidation}
             validationFn={minFiveWords}
+            error={valueError.description}
           />
+          <div className="flex flex-col w-full">
+            <label
+              htmlFor="imgUpload"
+              className="text-[14px] font-medium text-[#021526]"
+            >
+              ატვირთეთ ფოტო *
+            </label>
+            {inputValue.selectedFile === null && (
+              <input
+                type="file"
+                className=" hidden"
+                ref={imgRef}
+                onChange={handleImgChange}
+              />
+            )}
+
+            <button
+              className="w-full border border-dashed border-[#2D3648] h-[120px] rounded-lg flex items-center justify-center"
+              onClick={onChooseFile}
+            >
+              {inputValue.selectedFile ? (
+                // inputValue.selectedFile.name
+                <div className="relative">
+                  <img
+                    src={"data:image/jpeg;base64," + btoa(imgValue)}
+                    alt="image"
+                    className="w-[92px] h-[82px] rounded-[4px]"
+                  />
+                  <img
+                    src={RemoveIcon}
+                    alt="remove icon"
+                    className="absolute top-[65px] left-[75px]"
+                    onClick={onRemove}
+                  />
+                </div>
+              ) : (
+                <img src={UploadIcon} alt="upload icon" />
+              )}
+            </button>
+          </div>
         </div>
       </form>
     </div>

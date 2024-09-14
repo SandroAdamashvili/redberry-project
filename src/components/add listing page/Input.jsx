@@ -7,9 +7,28 @@ export default function Input({
   onInputChange,
   inputName,
   validationFn,
+  error,
 }) {
   function handleChange(event) {
     onInputChange(inputName, event.target.value, validationFn);
+  }
+
+  let labelCss = "text-[14px] font-normal flex flex-row gap-1 ";
+  let inputCss =
+    "border rounded-md h-[42px] w-[384px] focus:outline-none p-[10px] ";
+  let txtAreaCss =
+    "border rounded-md h-[135px] w-full focus:outline-none p-[10px] ";
+
+  if (error) {
+    labelCss += "text-[#F93B1D]";
+    inputCss += "border-[#F93B1D]";
+    txtAreaCss += "border-[#F93B1D]";
+  } else if (error === false) {
+    labelCss += "text-[#45A849]";
+  } else {
+    labelCss += "text-[#021526]";
+    inputCss += "border-[#808A93]";
+    txtAreaCss += "border-[#808A93]";
   }
 
   return (
@@ -23,21 +42,18 @@ export default function Input({
       {inputType === "textarea" ? (
         <textarea
           name={inputName}
-          className=" border border-[#808A93] rounded-md h-[135px] w-full focus:outline-none p-[10px]"
+          className={txtAreaCss}
           onChange={handleChange}
         ></textarea>
       ) : (
         <input
           type={inputType}
           name={inputName}
-          className=" border border-[#808A93] rounded-md h-[42px] w-[384px] focus:outline-none p-[10px]"
+          className={inputCss}
           onChange={handleChange}
         />
       )}
-      <label
-        htmlFor={inputName}
-        className="text-[14px] font-normal text-[#021526] flex flex-row gap-1"
-      >
+      <label htmlFor={inputName} className={labelCss}>
         <img src={Tick} alt="tick icon" />
         {validationText}
       </label>
