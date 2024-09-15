@@ -14,7 +14,7 @@ const ImageUpload = forwardRef(function ImageUpload(
       >
         ატვირთეთ ფოტო *
       </label>
-      {selectedFile === null && (
+      {imgValue === null && (
         <input
           type="file"
           className=" hidden"
@@ -27,11 +27,11 @@ const ImageUpload = forwardRef(function ImageUpload(
         className="w-full border border-dashed border-[#2D3648] h-[120px] rounded-lg flex items-center justify-center"
         onClick={onChooseFile}
       >
-        {selectedFile ? (
+        {imgValue ? (
           // inputValue.selectedFile.name
           <div className="relative">
             <img
-              src={"data:image/jpeg;base64," + btoa(imgValue)}
+              src={imgValue}
               alt="image"
               className="w-[92px] h-[82px] rounded-[4px]"
             />

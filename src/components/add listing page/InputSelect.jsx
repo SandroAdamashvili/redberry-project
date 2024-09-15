@@ -5,7 +5,7 @@ export default function InputSelect({
   data,
   onSelect,
 }) {
-  function handleRegionChange(event) {
+  function handleSelectChange(event) {
     const value = event.target.value;
     onSelect(inputName, value);
     localStorage.setItem(inputName, value);
@@ -22,11 +22,19 @@ export default function InputSelect({
       <select
         name="select"
         className=" border border-[#808A93] rounded-md h-[42px] w-[384px] focus:outline-none p-[10px]"
-        onChange={handleRegionChange}
+        onChange={handleSelectChange}
       >
         <option className="hidden">აირჩიე {title}</option>
         {data.map((element) => {
-          return (
+          return localStorage.getItem(inputName) == element.id ? (
+            <option
+              value={localStorage.getItem(inputName) ?? element.id}
+              key={element.id}
+              selected
+            >
+              {element.name}
+            </option>
+          ) : (
             <option value={element.id} key={element.id}>
               {element.name}
             </option>

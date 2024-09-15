@@ -51,3 +51,24 @@ export async function fetchRealEstates() {
 
     return realEstates;
 }
+
+export async function addListing(listing) {
+    const response = await fetch("https://api.real-estate-manager.redberryinternship.ge/api/real-estates", {
+        method: "POST",
+        body: listing,
+        headers: {
+            'accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            // 'Content-Type': 'multipart/form-data'
+        }
+    })
+
+    const resData = await response.json();
+
+    if (!response.ok) {
+        console.log(resData)
+        throw new Error(`Failed to add data ${resData}`)
+    }
+
+    
+}
