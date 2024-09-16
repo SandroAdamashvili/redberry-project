@@ -1,11 +1,10 @@
+import { forwardRef } from "react";
 import UploadIcon from "../../assets/icons/plus-circle.svg";
 import RemoveIcon from "../../assets/icons/remove-icon.svg";
 
-export default function AgentImage(
-  imgValue,
-  handleImgChange,
-  onChooseFile,
-  onRemove
+const AgentImage = forwardRef(function AgentImage(
+  { imgValue, handleImgChange, onChooseFile, onRemove },
+  ref
 ) {
   return (
     <div className="flex flex-col w-full">
@@ -19,7 +18,7 @@ export default function AgentImage(
         <input
           type="file"
           className=" hidden"
-          //   ref={ref}
+          ref={ref}
           onChange={handleImgChange}
         />
       )}
@@ -48,4 +47,6 @@ export default function AgentImage(
       </button>
     </div>
   );
-}
+});
+
+export default AgentImage;

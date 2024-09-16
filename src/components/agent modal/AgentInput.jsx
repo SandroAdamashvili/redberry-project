@@ -5,7 +5,12 @@ export default function AgentInput({
   inputName,
   error,
   validationText,
+  onInputChange,
 }) {
+  function handleChange(event) {
+    onInputChange(inputName, event.target.value);
+  }
+
   let labelCss = "text-[14px] font-normal flex flex-row gap-1 ";
   let inputCss =
     "border rounded-md h-[42px] w-[384px] focus:outline-none p-[10px] ";
@@ -29,7 +34,7 @@ export default function AgentInput({
       >
         {title}
       </label>
-      <input name={inputName} className={inputCss} />
+      <input name={inputName} className={inputCss} onChange={handleChange} />
       <label htmlFor={inputName} className={labelCss}>
         <img src={Tick} alt="tick icon" />
         {validationText}

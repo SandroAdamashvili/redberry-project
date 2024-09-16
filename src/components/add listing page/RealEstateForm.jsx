@@ -196,7 +196,7 @@ export default function RealEstateForm() {
 
   return (
     <div className="mx-auto w-[790px] flex flex-col justify-center mt-[62px] font-fira">
-      <AgentModal open={modalOpen} />
+      <AgentModal open={modalOpen} closeModal={() => setModalOpen(false)} />
       <h1 className=" text-center mb-[61px] text-[32px] text-[#021526] font-medium">
         ლისტინგის დამატება
       </h1>
