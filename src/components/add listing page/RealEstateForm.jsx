@@ -16,12 +16,14 @@ import {
   onlyNumbers,
 } from "../../validation.js";
 import ImageUpload from "./ImageUpload.jsx";
+import AgentModal from "../agent modal/AgentModal.jsx";
 
 export default function RealEstateForm() {
   const imgRef = useRef();
   const [imgBase64, setImgBase64] = useState(
     localStorage.getItem("imgBase64") ?? null
   );
+  const [modalOpen, setModalOpen] = useState(false);
   const [regionsData, setRegionsData] = useState([]);
   const [citiesData, setCitiesData] = useState([]);
   const [agentsData, setAgentsData] = useState([]);
@@ -114,9 +116,9 @@ export default function RealEstateForm() {
     const fd = new FormData();
     for (const key in value) {
       fd.append(key.toString(), value[key]);
-      // console.log(key);
+      console.log(key);
     }
-    // console.log(fd.get("address"));
+    console.log(fd.get("address"));
 
     try {
       await addListing(fd);
@@ -194,6 +196,7 @@ export default function RealEstateForm() {
 
   return (
     <div className="mx-auto w-[790px] flex flex-col justify-center mt-[62px] font-fira">
+      <AgentModal open={modalOpen} />
       <h1 className=" text-center mb-[61px] text-[32px] text-[#021526] font-medium">
         ლისტინგის დამატება
       </h1>
@@ -324,12 +327,16 @@ export default function RealEstateForm() {
               title="აგენტი"
               data={agentsData}
               onSelect={handleValueChange}
+              openModal={() => setModalOpen(true)}
             />
           </div>
         </div>
       </form>
       <div className="mt-[80px] flex flex-row justify-end gap-[15px] mb-[87px]">
-        <button className="px-4 py-[10px] border border-[#F93B1D] rounded-[10px] text-[#F93B1D] font-semibold hover:bg-[#F93B1D] hover:text-white">
+        <button
+          onClick={() => setModalOpen(true)}
+          className="px-4 py-[10px] border border-[#F93B1D] rounded-[10px] text-[#F93B1D] font-semibold hover:bg-[#F93B1D] hover:text-white"
+        >
           გაუქმება
         </button>
         <button

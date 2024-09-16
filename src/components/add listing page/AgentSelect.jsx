@@ -2,22 +2,23 @@ import { useState } from "react";
 import PlusCircleIcon from "../../assets/icons/plus-circle.svg";
 import DownArrowIcon from "../../assets/icons/icon-chevron-down.svg";
 
-export default function CustomDropdown({
+export default function AgentSelect({
   inputName,
   label,
   title,
   data,
   onSelect,
+  openModal,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState();
 
-  const handleSelect = (value) => {
+  function handleSelect(value) {
     setSelectedValue(value);
     onSelect(inputName, value);
     localStorage.setItem(inputName, value);
     setIsOpen(false);
-  };
+  }
 
   return (
     <div className="relative w-[384px]">
@@ -48,7 +49,10 @@ export default function CustomDropdown({
           <ul className="absolute left-0 w-full border border-gray-400 rounded-md bg-white mt-1 shadow-lg z-10">
             <li
               className="flex items-center p-3 cursor-pointer hover:bg-gray-100"
-              onClick={() => handleSelect("add-agent")}
+              onClick={() => {
+                openModal();
+                setIsOpen(false);
+              }}
             >
               <img
                 src={PlusCircleIcon}

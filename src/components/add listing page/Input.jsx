@@ -18,8 +18,15 @@ export default function Input({
 
   function handleFocus() {
     error = JSON.parse(localStorage.getItem("valueError"));
-    console.log("focus mocus");
-    console.log(error);
+    // JSON.parse(localStorage.getItem("valueError"))[inputName] !==
+    //   (null || "") &&
+    //   onValidation(
+    //     inputName,
+    //     JSON.parse(localStorage.getItem("valueError"))[inputName],
+    //     validationFn
+    //   );
+    // console.log("focus mocus");
+    // console.log(error);
   }
 
   let labelCss = "text-[14px] font-normal flex flex-row gap-1 ";
