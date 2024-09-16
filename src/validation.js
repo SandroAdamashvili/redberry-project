@@ -25,3 +25,9 @@ export function minFiveWords(value) {
     const newArr = wordsArr.filter(word => word.length > 0)
     return newArr.length >= 5;
 }
+
+export function imgValidation(value) {
+    if(value.size > 1024000 && value !== null) {
+        return false
+    }
+}

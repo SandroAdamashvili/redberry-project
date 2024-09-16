@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Input from "./Input.jsx";
 import InputSelect from "./InputSelect.jsx";
 import InputRadio from "./inputRadio.jsx";
+import AgentSelect from "./AgentSelect.jsx";
 import {
   addListing,
   fetchAgents,
@@ -18,8 +19,8 @@ import ImageUpload from "./ImageUpload.jsx";
 
 export default function RealEstateForm() {
   const imgRef = useRef();
-  const [imgSize, setImgSize] = useState(
-    localStorage.getItem("imgSize") ?? null
+  const [imgBase64, setImgBase64] = useState(
+    localStorage.getItem("imgBase64") ?? null
   );
   const [regionsData, setRegionsData] = useState([]);
   const [citiesData, setCitiesData] = useState([]);
@@ -34,20 +35,25 @@ export default function RealEstateForm() {
     agent_id: localStorage.getItem("agent_id") ?? "აირჩიე აგენტი",
     bedrooms: localStorage.getItem("bedrooms") ?? "",
     is_rental: localStorage.getItem("is_rental") ?? 0,
-    image: localStorage.getItem("image") ?? null,
+    image: null,
     description: localStorage.getItem("description") ?? "",
   });
 
-  const [valueError, setValueError] = useState({
-    address: null,
-    zip_code: null,
-    region: null,
-    city: null,
-    price: null,
-    area: null,
-    bedrooms: null,
-    description: null,
-  });
+  const [valueError, setValueError] = useState(
+    // localStorage.getItem("valueError")
+    //   ? JSON.parse(localStorage.getItem("valueError"))
+    //   :
+    {
+      address: "",
+      zip_code: null,
+      region: null,
+      city: null,
+      price: null,
+      area: null,
+      bedrooms: null,
+      description: "",
+    }
+  );
 
   useEffect(() => {
     async function fetchRegionsData() {
@@ -85,13 +91,32 @@ export default function RealEstateForm() {
     fetchAgentsData();
   }, []);
 
+  useEffect(() => {
+    async function handleImageConversion() {
+      const imageFileName = localStorage.getItem("image");
+      if (imgBase64 && imageFileName) {
+        try {
+          const file = await dataUrlToFile(imgBase64, imageFileName);
+          setInputValue((prevValues) => ({
+            ...prevValues,
+            image: file,
+          }));
+        } catch (error) {
+          console.error("Error converting base64 to file:", error);
+        }
+      }
+    }
+
+    handleImageConversion();
+  }, [imgBase64]);
+
   async function uploadData(value) {
     const fd = new FormData();
     for (const key in value) {
       fd.append(key.toString(), value[key]);
-      console.log(key);
+      // console.log(key);
     }
-    console.log(fd.get("address"));
+    // console.log(fd.get("address"));
 
     try {
       await addListing(fd);
@@ -100,7 +125,15 @@ export default function RealEstateForm() {
     }
   }
 
+  async function dataUrlToFile(dataUrl, fileName) {
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    const file = new File([blob], fileName, { type: "image/*" });
+    return file;
+  }
+
   function handleValueChange(name, value) {
+    localStorage.setItem("valueError", JSON.stringify(valueError));
     localStorage.setItem(name, value);
     setInputValue((prevValues) => ({
       ...prevValues,
@@ -121,49 +154,18 @@ export default function RealEstateForm() {
   function handleImgChange(event) {
     event.preventDefault();
     if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
       setInputValue((prevValues) => ({
         ...prevValues,
-        image: event.target.files[0],
+        image: file,
       }));
-      // setImgFile(event.target.files[0]);
+      // localStorage.getItem("image") &&
+      localStorage.setItem("image", file.name);
       let reader = new FileReader();
       reader.onloadend = function () {
         const base64String = reader.result;
-        //   const stringLength =
-        //     base64String.length - "data:image/png;base64,".length;
-        //   const sizeInKb =
-        //     (4 * Math.ceil(stringLength / 3) * 0.5624896334383812) / 1000;
-
-        //   // setInputValue((prevValues) => ({
-        //   //   ...prevValues,
-        //   //   image: event.target.files[0],
-        //   // }));
-        //   console.log("Encoded Base 64 File String:", sizeInKb);
-        //   let data = reader.result.split(",")[1];
-        //   let binaryBlob = atob(data);
-        setImgSize(base64String);
-        //   let mimeString = reader.result
-        //     .split(",")[0]
-        //     .split(":")[1]
-        //     .split(";")[0];
-
-        //   // write the bytes of the string to an ArrayBuffer
-        //   let arrayBuffer = new ArrayBuffer(binaryBlob.length);
-        //   let _ia = new Uint8Array(arrayBuffer);
-        //   for (let i = 0; i < binaryBlob.length; i++) {
-        //     _ia[i] = binaryBlob.charCodeAt(i);
-        //   }
-
-        //   let dataView = new DataView(arrayBuffer);
-        //   let blob = new Blob([dataView], { type: mimeString });
-        //   setInputValue((prevValues) => ({
-        //     ...prevValues,
-        //     image: blob,
-        //   }));
-        //   console.log("Encoded Binary File String:", blob);
-
-        localStorage.setItem("imgSize", base64String);
-        //   localStorage.setItem("image", binaryBlob);
+        setImgBase64(base64String);
+        localStorage.setItem("imgBase64", base64String);
       };
       reader.readAsDataURL(event.target.files[0]);
     }
@@ -171,18 +173,18 @@ export default function RealEstateForm() {
 
   function onChooseFile(event) {
     event.preventDefault();
-    if (inputValue.image === null) {
+    if (imgBase64 === null) {
       imgRef.current.click();
     }
   }
 
   function onRemove() {
-    setImgSize(null);
+    setImgBase64(null);
     setInputValue((prevValues) => ({
       ...prevValues,
       image: null,
     }));
-    localStorage.removeItem("imgSize");
+    localStorage.removeItem("imgBase64");
     localStorage.removeItem("image");
   }
 
@@ -223,7 +225,7 @@ export default function RealEstateForm() {
               onValidation={handleValidation}
               inputName="address"
               validationFn={minTwoSymbols}
-              error={valueError.address}
+              error={valueError}
               onInputChange={handleValueChange}
             />
             <Input
@@ -233,7 +235,7 @@ export default function RealEstateForm() {
               inputName="zip_code"
               onValidation={handleValidation}
               validationFn={onlyNumbers}
-              error={valueError.zip_code}
+              error={valueError}
               onInputChange={handleValueChange}
             />
           </div>
@@ -270,7 +272,7 @@ export default function RealEstateForm() {
               inputName="price"
               onValidation={handleValidation}
               validationFn={onlyNumbers}
-              error={valueError.price}
+              error={valueError}
               onInputChange={handleValueChange}
             />
             <Input
@@ -280,7 +282,7 @@ export default function RealEstateForm() {
               inputName="area"
               onValidation={handleValidation}
               validationFn={onlyNumbers}
-              error={valueError.area}
+              error={valueError}
               onInputChange={handleValueChange}
             />
           </div>
@@ -291,7 +293,7 @@ export default function RealEstateForm() {
             inputName="bedrooms"
             onValidation={handleValidation}
             validationFn={onlyIntegers}
-            error={valueError.bedrooms}
+            error={valueError}
             onInputChange={handleValueChange}
           />
           <Input
@@ -301,7 +303,7 @@ export default function RealEstateForm() {
             inputName="description"
             onValidation={handleValidation}
             validationFn={minFiveWords}
-            error={valueError.description}
+            error={valueError}
             onInputChange={handleValueChange}
           />
           <ImageUpload
@@ -309,14 +311,14 @@ export default function RealEstateForm() {
             // selectedFile={imgFile}
             handleImgChange={handleImgChange}
             onChooseFile={onChooseFile}
-            imgValue={imgSize}
+            imgValue={imgBase64}
             onRemove={onRemove}
           />
         </div>
         <div className="mt-[80px] flex flex-col gap-[22px]">
           <h2 className="text-[16px] font-medium text-[#1A1A1F]">აგენტი</h2>
           <div className="flex flex-row w-full gap-5">
-            <InputSelect
+            <AgentSelect
               inputName="agent_id"
               label="აირჩიე"
               title="აგენტი"

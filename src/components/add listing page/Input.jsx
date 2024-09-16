@@ -16,18 +16,26 @@ export default function Input({
     localStorage.setItem(inputName, event.target.value);
   }
 
+  function handleFocus() {
+    error = JSON.parse(localStorage.getItem("valueError"));
+    console.log("focus mocus");
+    console.log(error);
+  }
+
   let labelCss = "text-[14px] font-normal flex flex-row gap-1 ";
   let inputCss =
     "border rounded-md h-[42px] w-[384px] focus:outline-none p-[10px] ";
   let txtAreaCss =
     "border rounded-md h-[135px] w-full focus:outline-none p-[10px] ";
 
-  if (error) {
+  if (error[inputName]) {
     labelCss += "text-[#F93B1D]";
     inputCss += "border-[#F93B1D]";
     txtAreaCss += "border-[#F93B1D]";
-  } else if (error === false) {
+  } else if (error[inputName] === false) {
     labelCss += "text-[#45A849]";
+    inputCss += "border-[#808A93]";
+    txtAreaCss += "border-[#808A93]";
   } else {
     labelCss += "text-[#021526]";
     inputCss += "border-[#808A93]";
@@ -47,6 +55,7 @@ export default function Input({
           name={inputName}
           className={txtAreaCss}
           onChange={handleChange}
+          // onFocus={handleChange}
           value={
             localStorage.getItem(inputName) === null
               ? ""
@@ -59,6 +68,7 @@ export default function Input({
           name={inputName}
           className={inputCss}
           onChange={handleChange}
+          onFocus={handleFocus}
           value={
             localStorage.getItem(inputName) === null
               ? ""
