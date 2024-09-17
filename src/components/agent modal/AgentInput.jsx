@@ -6,9 +6,12 @@ export default function AgentInput({
   error,
   validationText,
   onInputChange,
+  onValidation,
+  validationFn,
 }) {
   function handleChange(event) {
     onInputChange(inputName, event.target.value);
+    onValidation(inputName, event.target.value, validationFn);
   }
 
   let labelCss = "text-[14px] font-normal flex flex-row gap-1 ";

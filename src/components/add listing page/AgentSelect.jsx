@@ -37,11 +37,14 @@ export default function AgentSelect({
           className="border border-gray-400 rounded-md h-10 w-full flex items-center justify-between px-3 bg-white text-gray-800 focus:outline-none"
         >
           <span>
-            {data.map((element) => {
-              return localStorage.getItem(inputName) == element.id
-                ? element.name
-                : `აირჩიე ${title}`;
-            })}
+            {localStorage.getItem(inputName)
+              ? data.map((element) => {
+                  return (
+                    localStorage.getItem(inputName) == element.id &&
+                    element.name
+                  );
+                })
+              : `აირჩიე ${title}`}
           </span>
           <img src={DownArrowIcon} alt="down arrow" className="w-4 h-4" />
         </button>

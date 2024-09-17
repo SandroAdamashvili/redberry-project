@@ -1,18 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 import AgentInput from "./AgentInput";
 import AgentImage from "./AgentImage";
+import { addAgent } from "../../http";
+import {
+  emailValidation,
+  imgValidation,
+  minTwoSymbols,
+} from "../../validation";
 
 export default function ({ open, closeModal }) {
   const dialog = useRef();
   const imgRef = useRef();
   const [imgBase64, setImgBase64] = useState(null);
   const [agentInfo, setAgentInfo] = useState({
-    name: "",
-    surname: "",
-    email: "",
-    phone: "",
+    name: null,
+    surname: null,
+    email: null,
+    phone: null,
     avatar: null,
   });
+
+  const [agentError, setAgentError] = useState({
+    name: null,
+    surname: null,
+    email: null,
+    phone: null,
+    avatar: agentInfo.avatar !== null && agentInfo.avatar.size > 1000000,
+  });
+
+  agentInfo.avatar !== null && console.log(agentInfo.avatar.size);
 
   useEffect(() => {
     if (open) {
@@ -22,12 +38,67 @@ export default function ({ open, closeModal }) {
     }
   }, [open]);
 
+  async function uploadData(value) {
+    let invalid = false;
+    for (const key in agentError) {
+      if (agentError[key] === true || agentInfo[key] === null) {
+        invalid = true;
+        setAgentError((prevValues) => ({
+          ...prevValues,
+          [key]: true,
+        }));
+      }
+    }
+
+    if (invalid === true) {
+      return;
+    }
+
+    const fd = new FormData();
+    for (const key in value) {
+      fd.append(key.toString(), value[key]);
+      console.log(key);
+    }
+    console.log(fd.get("name"));
+
+    try {
+      // if (Object.values(agentError).find(null || true)) {
+      //   console.log(errrrrror);
+      // }
+      await addAgent(fd);
+      closeModal();
+    } catch (error) {
+      console.error("Error uploading listing data:", error);
+    }
+  }
+
   function handleChange(name, value) {
     setAgentInfo((prevValues) => ({
       ...prevValues,
       [name]: value,
     }));
   }
+
+  function handleValidation(name, enteredValue, validationFn) {
+    setAgentError((prevValues) => {
+      const valueError = validationFn(enteredValue);
+      return {
+        ...prevValues,
+        [name]: !valueError,
+      };
+    });
+  }
+
+  // function handleImgValidation() {
+  //   agentInfo.avatar !== null &&
+  //     setAgentError((prevValues) => {
+  //       const valueError = agentInfo.avatar.size > 1000000;
+  //       return {
+  //         ...prevValues,
+  //         avatar: valueError,
+  //       };
+  //     });
+  // }
 
   function handleImgChange(event) {
     event.preventDefault();
@@ -43,6 +114,10 @@ export default function ({ open, closeModal }) {
         setImgBase64(base64String);
       };
       reader.readAsDataURL(event.target.files[0]);
+      setAgentError((prevValues) => ({
+        ...prevValues,
+        avatar: file.size > 1000000 || !file.type.startsWith("image") || null,
+      }));
     }
   }
 
@@ -61,6 +136,14 @@ export default function ({ open, closeModal }) {
     }));
   }
 
+  // function handleSubmit() {
+  //   for (const key in agentError) {
+  //     if ()
+  //   }
+  // }
+
+  console.log(agentError);
+
   console.log(agentInfo);
 
   return (
@@ -77,12 +160,18 @@ export default function ({ open, closeModal }) {
                 inputName="name"
                 validationText="მინიმუმ ორი სიმბოლო"
                 onInputChange={handleChange}
+                onValidation={handleValidation}
+                error={agentError.name}
+                validationFn={minTwoSymbols}
               />
               <AgentInput
                 title="გვარი *"
                 inputName="surname"
                 validationText="მინიმუმ ორი სიმბოლო"
                 onInputChange={handleChange}
+                onValidation={handleValidation}
+                error={agentError.surname}
+                validationFn={minTwoSymbols}
               />
             </div>
             <div className="flex flex-row w-full gap-5">
@@ -91,20 +180,29 @@ export default function ({ open, closeModal }) {
                 inputName="email"
                 validationText="გამოიყენეთ @redberry.ge ფოსტა"
                 onInputChange={handleChange}
+                onValidation={handleValidation}
+                error={agentError.email}
+                validationFn={emailValidation}
               />
               <AgentInput
                 title="ტელეფონის ნომერი *"
                 inputName="phone"
                 validationText="მხოლოდ რიცხვები"
                 onInputChange={handleChange}
+                onValidation={handleValidation}
+                error={agentError.phone}
               />
             </div>
             <AgentImage
               ref={imgRef}
               imgValue={imgBase64}
+              selectedFile={agentInfo.avatar}
               handleImgChange={handleImgChange}
               onChooseFile={onChooseFile}
               onRemove={onRemove}
+              // onValidation={handleImgValidation}
+              error={agentError.avatar}
+              // validationFn={imgValidation}
             />
           </div>
           <div className="mt-[94px] w-full flex flex-row justify-end gap-[15px]">
@@ -117,8 +215,11 @@ export default function ({ open, closeModal }) {
             >
               გაუქმება
             </button>
-            <button className="px-4 py-[10px] border bg-[#F93B1D] rounded-[10px] text-white font-semibold hover:bg-[#DF3014]">
-              დაამატე ლისტინგი
+            <button
+              className="px-4 py-[10px] border bg-[#F93B1D] rounded-[10px] text-white font-semibold hover:bg-[#DF3014]"
+              onClick={() => uploadData(agentInfo)}
+            >
+              დაამატე აგენტი
             </button>
           </div>
         </div>

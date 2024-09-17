@@ -1,11 +1,28 @@
-import { forwardRef } from "react";
+import { forwardRef, useEffect } from "react";
 import UploadIcon from "../../assets/icons/plus-circle.svg";
 import RemoveIcon from "../../assets/icons/remove-icon.svg";
+import Tick from "../../assets/icons/tick.svg";
 
 const AgentImage = forwardRef(function AgentImage(
-  { imgValue, handleImgChange, onChooseFile, onRemove },
+  {
+    imgValue,
+    handleImgChange,
+    onChooseFile,
+    onRemove,
+    onValidation,
+    validationFn,
+    error,
+    selectedFile,
+  },
   ref
 ) {
+  function handleChange(event) {
+    handleImgChange(event);
+    // onValidation();
+    // onValidation("avatar", event.target.value, validationFn);
+  }
+
+  console.log(error);
   return (
     <div className="flex flex-col w-full">
       <label
@@ -19,7 +36,7 @@ const AgentImage = forwardRef(function AgentImage(
           type="file"
           className=" hidden"
           ref={ref}
-          onChange={handleImgChange}
+          onChange={handleChange}
         />
       )}
 
@@ -45,6 +62,15 @@ const AgentImage = forwardRef(function AgentImage(
           <img src={UploadIcon} alt="upload icon" />
         )}
       </button>
+      {error && (
+        <label
+          htmlFor="imgUpload"
+          className="text-[14px] font-normal flex flex-row gap-1 text-[#F93B1D]"
+        >
+          <img src={Tick} alt="tick icon" />
+          ატვირთეთ ვალიდური სურათი. სურათი არ უნდა აღემატებოდეს 1mb-ს
+        </label>
+      )}
     </div>
   );
 });

@@ -69,6 +69,23 @@ export async function addListing(listing) {
         console.log(resData)
         throw new Error(`Failed to add data ${resData}`)
     }
+}
 
-    
+export async function addAgent(agent) {
+    const response = await fetch("https://api.real-estate-manager.redberryinternship.ge/api/agents", {
+        method: "POST",
+        body: agent,
+        headers: {
+            'accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            // 'Content-Type': 'multipart/form-data'
+        }
+    })
+
+    const resData = await response.json();
+
+    if (!response.ok) {
+        console.log(resData)
+        throw new Error(`Failed to add data ${resData}`)
+    }
 }

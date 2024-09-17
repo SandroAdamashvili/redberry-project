@@ -26,8 +26,16 @@ export function minFiveWords(value) {
     return newArr.length >= 5;
 }
 
+export function emailValidation(value) {
+    return value.endsWith('@redberry.ge')
+}
+
+export function phoneValidation(value) {
+
+}
+
 export function imgValidation(value) {
-    if(value.size > 1024000 && value !== null) {
+    if(value.size > 1024000 && value === null) {
         return false
     }
 }
