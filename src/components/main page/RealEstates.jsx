@@ -23,9 +23,9 @@ export default function RealEstates() {
   console.log(realEstateData);
 
   return (
-    <ul className="mx-[162px] mt-8 flex flex-row flex-wrap gap-5">
+    <div className="mx-[162px] mt-8 flex flex-row flex-wrap gap-5">
       {realEstateData.map((element) => (
-        <li
+        <div
           key={element.id}
           className="w-[384px] border border-[#DBDBDB] rounded-[14px] hover:shadow-[#02152614]  hover:shadow-lg hover:cursor-pointer"
         >
@@ -57,8 +57,8 @@ export default function RealEstates() {
               </span>
             </div>
           </div>
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }

@@ -15,9 +15,8 @@ export function onlyIntegers(value) {
     if (value.length === 0) {
         return false;
       }
-
-    const number = Number(value);
-    return Number.isInteger(number);
+    const checkOnlyNums = /^\d+$/
+    return checkOnlyNums.test(value)
 }
 
 export function minFiveWords(value) {
@@ -31,7 +30,7 @@ export function emailValidation(value) {
 }
 
 export function phoneValidation(value) {
-
+    return onlyIntegers(value) && value.startsWith(5) && value.length === 9
 }
 
 export function imgValidation(value) {

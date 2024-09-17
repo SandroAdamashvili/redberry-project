@@ -6,6 +6,8 @@ import {
   emailValidation,
   imgValidation,
   minTwoSymbols,
+  onlyIntegers,
+  phoneValidation,
 } from "../../validation";
 
 export default function ({ open, closeModal }) {
@@ -187,10 +189,11 @@ export default function ({ open, closeModal }) {
               <AgentInput
                 title="ტელეფონის ნომერი *"
                 inputName="phone"
-                validationText="მხოლოდ რიცხვები"
+                validationText="მხოლოდ რიცხვები, უნდა იყოს ფორმატის 5XXXXXXXX"
                 onInputChange={handleChange}
                 onValidation={handleValidation}
                 error={agentError.phone}
+                validationFn={phoneValidation}
               />
             </div>
             <AgentImage
