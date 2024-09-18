@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import { fetchRealEstates } from "../../http.js";
 import MapIcon from "../../assets/icons/location-marker.svg";
 import BedIcon from "../../assets/icons/bed.svg";
-import areaIcon from "../../assets/icons/vector.svg";
+import areaIcon from "../../assets/icons/area.svg";
 import ZipCodeIcon from "../../assets/icons/zip-code.svg";
 
-export default function RealEstates() {
+export default function RealEstates({ onSelect }) {
   const [realEstateData, setRealEstateData] = useState([]);
 
   useEffect(() => {
@@ -26,6 +26,7 @@ export default function RealEstates() {
     <div className="mx-[162px] mt-8 flex flex-row flex-wrap gap-5">
       {realEstateData.map((element) => (
         <div
+          onClick={() => onSelect(element.id)}
           key={element.id}
           className="w-[384px] border border-[#DBDBDB] rounded-[14px] hover:shadow-[#02152614]  hover:shadow-lg hover:cursor-pointer"
         >
