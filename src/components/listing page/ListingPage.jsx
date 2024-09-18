@@ -6,7 +6,7 @@ import ZipCodeIcon from "../../assets/icons/zip-code.svg";
 import EmailIcon from "../../assets/icons/email.svg";
 import PhoneIcon from "../../assets/icons/phone.svg";
 
-export default function ListingPage({ data, onBack }) {
+export default function ListingPage({ data, onBack, onDelete }) {
   console.log(data);
 
   const date = new Date(data.created_at);
@@ -96,7 +96,10 @@ export default function ListingPage({ data, onBack }) {
               </span>
             </div>
           </div>
-          <button className="mt-5 p-[10px] border border-[#676E76] rounded-lg text-[12px] leading-[14.4px] w-fit text-[#676E76] font-bold focus:outline-none hover:bg-[#676E76] hover:text-white">
+          <button
+            onClick={() => onDelete(data.id)}
+            className="mt-5 p-[10px] border border-[#676E76] rounded-lg text-[12px] leading-[14.4px] w-fit text-[#676E76] font-bold focus:outline-none hover:bg-[#676E76] hover:text-white"
+          >
             ლისტინგის წაშლა
           </button>
         </div>

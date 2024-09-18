@@ -105,3 +105,17 @@ export async function fetchListing(id) {
 
     return listing;
 }
+
+export async function deleteListing(id) {
+    const response = await fetch(`https://api.real-estate-manager.redberryinternship.ge/api/real-estates/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+
+    if (!response.ok) {
+        throw new Error("Failed to delete listing")
+    }
+}

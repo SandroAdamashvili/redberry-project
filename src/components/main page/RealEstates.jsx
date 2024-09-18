@@ -5,26 +5,12 @@ import BedIcon from "../../assets/icons/bed.svg";
 import areaIcon from "../../assets/icons/area.svg";
 import ZipCodeIcon from "../../assets/icons/zip-code.svg";
 
-export default function RealEstates({ onSelect }) {
-  const [realEstateData, setRealEstateData] = useState([]);
-
-  useEffect(() => {
-    async function fetchRealEstateData() {
-      try {
-        const realEstate = await fetchRealEstates();
-        setRealEstateData(realEstate);
-      } catch (error) {
-        console.error("Error fetching real-estates data:", error);
-      }
-    }
-    fetchRealEstateData();
-  }, []);
-
-  console.log(realEstateData);
+export default function RealEstates({ data, onSelect }) {
+  // const [realEstateData, setRealEstateData] = useState([]);
 
   return (
     <div className="mx-[162px] mt-8 flex flex-row flex-wrap gap-5">
-      {realEstateData.map((element) => (
+      {data.map((element) => (
         <div
           onClick={() => onSelect(element.id)}
           key={element.id}
