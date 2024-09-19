@@ -1,40 +1,15 @@
 import { useEffect, useState } from "react";
 import FilterItem from "./FilterItem";
 
-export default function FilterValues({ regions, handleRemoveRegion }) {
-  const [priceRange, setPriceRange] = useState(null);
-  const [areaRange, setAreaRange] = useState(null);
-  const [bedrooms, setBedrooms] = useState(null);
-
-  function loadDataFromLocalStorage(name) {
-    const savedState = localStorage.getItem(name);
-    return savedState ? JSON.parse(savedState) : null;
-  }
-
-  const priceRangeData = loadDataFromLocalStorage("ფასი");
-
-  useEffect(() => {
-    setPriceRange(loadDataFromLocalStorage("ფასი"));
-    setAreaRange(loadDataFromLocalStorage("ფართობი"));
-    setBedrooms(loadDataFromLocalStorage("bedroomCount"));
-  }, []);
-
-  function handleRemoveFilter(name) {
-    setPriceRange(priceRangeData);
-    localStorage.removeItem(name);
-    if (name === "ფასი") setPriceRange(null);
-    if (name === "ფართობი") setAreaRange(null);
-    if (name === "bedroomCount") setBedrooms(null);
-  }
-
-  function handleRemoveAll() {
-    localStorage.clear();
-    // setRegions(null);
-    setPriceRange(null);
-    setAreaRange(null);
-    setBedrooms(null);
-  }
-
+export default function FilterValues({
+  regions,
+  priceRange,
+  areaRange,
+  bedrooms,
+  handleRemoveRegion,
+  handleRemoveFilter,
+  handleRemoveAll,
+}) {
   console.log(regions);
 
   return (
@@ -52,13 +27,13 @@ export default function FilterValues({ regions, handleRemoveRegion }) {
               )
             );
           })}
-        {priceRangeData && (
+        {priceRange.from && (
           <FilterItem
-            filter={`${priceRangeData.from}₾ - ${priceRangeData.to}₾`}
+            filter={`${priceRange.from}₾ - ${priceRange.to}₾`}
             onRemove={() => handleRemoveFilter("ფასი")}
           />
         )}
-        {areaRange && (
+        {areaRange.from && (
           <FilterItem
             filter={`${areaRange.from}მ² - ${areaRange.to}მ²`}
             onRemove={() => handleRemoveFilter("ფართობი")}
@@ -71,7 +46,10 @@ export default function FilterValues({ regions, handleRemoveRegion }) {
           />
         )}
       </ul>
-      <button onClick={handleRemoveAll}>გასუფთავება</button>
+      {(Object.values(regions).includes(true) ||
+        priceRange.from ||
+        areaRange.from ||
+        bedrooms) && <button onClick={handleRemoveAll}>გასუფთავება</button>}
     </div>
   );
 }

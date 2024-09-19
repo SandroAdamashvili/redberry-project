@@ -6,7 +6,7 @@ export default function FilterNumberValues({ onSelect, symbol }) {
       {values.map((value) => (
         <li
           key={value}
-          onClick={() => onSelect(value)}
+          onClick={() => onSelect(value, symbol)}
           className="hover:cursor-pointer"
         >
           {value.toLocaleString()} {symbol}

@@ -1,19 +1,13 @@
 import { useState } from "react";
 
-export default function FilterBedroomCount({ onSelect }) {
-  const [bedroomValue, setBedroomValue] = useState(
-    localStorage.getItem("bedroomCount")
-      ? JSON.parse(localStorage.getItem("bedroomCount"))
-      : ""
-  );
-
+export default function FilterBedroomCount({
+  bedroomValue,
+  onSelect,
+  handleBedroomChange,
+}) {
   function handleBedroomFilter() {
     localStorage.setItem("bedroomCount", JSON.stringify(bedroomValue));
     onSelect();
-  }
-
-  function handleChange(event) {
-    setBedroomValue(event.target.value);
   }
 
   return (
@@ -22,7 +16,7 @@ export default function FilterBedroomCount({ onSelect }) {
       <input
         type="number"
         className="w-[41px] h-[42px] focus:outline-none p-[10px] border border-[#808A93] text-[#808A93] rounded-md text-center"
-        onChange={handleChange}
+        onChange={handleBedroomChange}
         value={bedroomValue}
       />
       <span className="w-full flex justify-end">

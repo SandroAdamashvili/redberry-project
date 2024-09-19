@@ -1,12 +1,16 @@
 import { useState } from "react";
 import FilterNumberValues from "./FilterNumberValues";
 
-export default function FilterNumber({ title, symbol, indicator, onSelect }) {
-  const [valueRange, setValueRange] = useState(
-    localStorage.getItem(indicator)
-      ? JSON.parse(localStorage.getItem(indicator))
-      : { from: "", to: "" }
-  );
+export default function FilterNumber({
+  title,
+  symbol,
+  indicator,
+  onSelect,
+  valueRange,
+  handleRangeChange,
+  handleFromValueSelect,
+  handleToValueSelect,
+}) {
   const [validationError, setValidationError] = useState("");
 
   function handleRangeFilter() {
@@ -20,19 +24,6 @@ export default function FilterNumber({ title, symbol, indicator, onSelect }) {
     onSelect();
   }
 
-  function handleChange(event) {
-    const { name, value } = event.target;
-    setValueRange((prevState) => ({ ...prevState, [name]: value }));
-  }
-
-  function handleFromValueSelect(num) {
-    setValueRange((prevState) => ({ ...prevState, from: num }));
-  }
-
-  function handleToValueSelect(num) {
-    setValueRange((prevState) => ({ ...prevState, to: num }));
-  }
-
   return (
     <div className="absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white">
       <h1 className="mb-[24px]">{title}</h1>
@@ -43,7 +34,7 @@ export default function FilterNumber({ title, symbol, indicator, onSelect }) {
             placeholder="დან"
             className="w-full focus:outline-none"
             name="from"
-            onChange={handleChange}
+            onChange={(e) => handleRangeChange(e, indicator)}
             value={valueRange.from}
           />
           <span className="pr-2">{symbol}</span>
@@ -55,7 +46,7 @@ export default function FilterNumber({ title, symbol, indicator, onSelect }) {
             placeholder="მდე"
             className="w-full focus:outline-none"
             name="to"
-            onChange={handleChange}
+            onChange={(e) => handleRangeChange(e, indicator)}
             value={valueRange.to}
           />
           <span className="pr-2">{symbol}</span>
