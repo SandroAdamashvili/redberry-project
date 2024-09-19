@@ -29,3 +29,24 @@ input[type="radio"] {
   padding: 87px 105px;
   z-index: 2;
 }
+
+.swiper-container {
+  margin: 0 97px;
+  margin-bottom: 228px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+ }
+
+ .swiper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+ }
+
+.swiper-slide {
+  width: 384px !important;
+  height: fit-content;
+  flex-shrink: 0;
+}

@@ -6,9 +6,14 @@ import Header from "./components/main page/Header.jsx";
 import RealEstates from "./components/main page/RealEstates.jsx";
 import { fetchListing, fetchRealEstates, deleteListing } from "./http.js";
 import ListingPage from "./components/listing page/ListingPage.jsx";
+import MainPage from "./components/main page/MainPage.jsx";
 
 function App() {
-  const [listingPageData, setListingPageData] = useState(null);
+  const [listingPageData, setListingPageData] = useState(
+    localStorage.getItem("listingObj")
+      ? JSON.parse(localStorage.getItem("listingObj"))
+      : null
+  );
   const [realEstateData, setRealEstateData] = useState([]);
 
   useEffect(() => {
@@ -27,6 +32,7 @@ function App() {
     try {
       const listing = await fetchListing(id);
       setListingPageData(listing);
+      localStorage.setItem("listingObj", JSON.stringify(listing));
     } catch (error) {
       console.error("Error fetching real-estate listing data:", error);
     }
@@ -51,15 +57,14 @@ function App() {
       <Header />
       {/* <RealEstateForm /> */}
       {listingPageData === null ? (
-        <div>
-          <Filter />
-          <RealEstates data={realEstateData} onSelect={fetchListingData} />
-        </div>
+        <MainPage data={realEstateData} onSelect={fetchListingData} />
       ) : (
         <ListingPage
           data={listingPageData}
           onBack={() => setListingPageData(null)}
           onDelete={deleteRealEstateListing}
+          realEstatesData={realEstateData}
+          onSelect={fetchListingData}
         />
       )}
     </>
