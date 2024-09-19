@@ -16,6 +16,11 @@ export default function Filter() {
     area: false,
     bedroomCount: false,
   });
+  const [checkedRegions, setCheckedRegions] = useState(
+    localStorage.getItem("checkedRegions")
+      ? JSON.parse(localStorage.getItem("checkedRegions"))
+      : {}
+  );
 
   useEffect(() => {
     async function fetchRegionsData() {
@@ -45,6 +50,23 @@ export default function Filter() {
     });
   }
 
+  const handleCheck = (event) => {
+    const { name, checked } = event.target;
+    setCheckedRegions((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
+  };
+
+  function handleRemoveRegion(name) {
+    // setRegions(regionsData);
+    setCheckedRegions((prevRegions) => {
+      const updatedRegions = { ...prevRegions, [name]: false };
+      localStorage.setItem("checkedRegions", JSON.stringify(updatedRegions));
+      return updatedRegions;
+    });
+  }
+
   // console.log(regionsData);
   // console.log(modalOpen);
 
@@ -63,6 +85,8 @@ export default function Filter() {
               <FilterRegion
                 regionsData={regionsData}
                 onSelect={() => handleModal("region")}
+                checkedRegions={checkedRegions}
+                handleChange={handleCheck}
               />
             )}
           </div>
@@ -123,7 +147,10 @@ export default function Filter() {
           </button>
         </div>
       </div>
-      <FilterValues />
+      <FilterValues
+        regions={!modalOpen.region && checkedRegions}
+        handleRemoveRegion={handleRemoveRegion}
+      />
     </>
   );
 }

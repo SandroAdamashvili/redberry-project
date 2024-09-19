@@ -61,7 +61,10 @@ function App() {
       ) : (
         <ListingPage
           data={listingPageData}
-          onBack={() => setListingPageData(null)}
+          onBack={() => {
+            setListingPageData(null);
+            localStorage.removeItem("listingObj");
+          }}
           onDelete={deleteRealEstateListing}
           realEstatesData={realEstateData}
           onSelect={fetchListingData}

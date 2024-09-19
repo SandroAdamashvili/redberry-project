@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import FilterItem from "./FilterItem";
 
-export default function FilterValues() {
-  const [regions, setRegions] = useState({});
+export default function FilterValues({ regions, handleRemoveRegion }) {
   const [priceRange, setPriceRange] = useState(null);
   const [areaRange, setAreaRange] = useState(null);
   const [bedrooms, setBedrooms] = useState(null);
@@ -12,7 +11,6 @@ export default function FilterValues() {
     return savedState ? JSON.parse(savedState) : null;
   }
 
-  const regionsData = loadDataFromLocalStorage("checkedRegions") || {};
   const priceRangeData = loadDataFromLocalStorage("ფასი");
 
   useEffect(() => {
@@ -20,15 +18,6 @@ export default function FilterValues() {
     setAreaRange(loadDataFromLocalStorage("ფართობი"));
     setBedrooms(loadDataFromLocalStorage("bedroomCount"));
   }, []);
-
-  function handleRemoveRegion(name) {
-    setRegions(regionsData);
-    setRegions((prevRegions) => {
-      const updatedRegions = { ...prevRegions, [name]: false };
-      localStorage.setItem("checkedRegions", JSON.stringify(updatedRegions));
-      return updatedRegions;
-    });
-  }
 
   function handleRemoveFilter(name) {
     setPriceRange(priceRangeData);
@@ -40,19 +29,21 @@ export default function FilterValues() {
 
   function handleRemoveAll() {
     localStorage.clear();
-    setRegions(null);
+    // setRegions(null);
     setPriceRange(null);
     setAreaRange(null);
     setBedrooms(null);
   }
 
+  console.log(regions);
+
   return (
     <div className="flex flex-row mx-[162px] mt-4 gap-2">
       <ul className="flex flex-row gap-2">
         {regions &&
-          Object.keys(regionsData).map((region) => {
+          Object.keys(regions).map((region) => {
             return (
-              regionsData[region] && (
+              regions[region] && (
                 <FilterItem
                   filter={region}
                   key={region}

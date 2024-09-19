@@ -15,8 +15,6 @@ export default function RealEstates({
   zipCode,
   ...props
 }) {
-  // const [realEstateData, setRealEstateData] = useState([]);
-
   return (
     <div
       {...props}

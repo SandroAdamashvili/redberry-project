@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 
-export default function FilterRegion({ regionsData, onSelect }) {
+export default function FilterRegion({
+  regionsData,
+  onSelect,
+  checkedRegions,
+  handleChange,
+}) {
   // const divRef = useRef(null);
 
   // useEffect(() => {
@@ -16,29 +21,12 @@ export default function FilterRegion({ regionsData, onSelect }) {
   //   };
   // }, [divRef]);
 
-  function loadStateFromLocalStorage() {
-    const savedState = localStorage.getItem("checkedRegions");
-    return savedState ? JSON.parse(savedState) : {};
-  }
-
-  const [checkedRegions, setCheckedRegions] = useState(
-    loadStateFromLocalStorage
-  );
+  // console.log(checkedRegions);
 
   function handleRegionFilter() {
     localStorage.setItem("checkedRegions", JSON.stringify(checkedRegions));
     onSelect();
   }
-
-  const handleChange = (event) => {
-    const { name, checked } = event.target;
-    setCheckedRegions((prevState) => ({
-      ...prevState,
-      [name]: checked,
-    }));
-  };
-
-  // console.log(checkedRegions);
 
   return (
     <div

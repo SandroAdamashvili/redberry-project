@@ -2,12 +2,11 @@ import { useState } from "react";
 import FilterNumberValues from "./FilterNumberValues";
 
 export default function FilterNumber({ title, symbol, indicator, onSelect }) {
-  function loadStateFromLocalStorage() {
-    const savedState = localStorage.getItem(indicator);
-    return savedState ? JSON.parse(savedState) : { from: "", to: "" };
-  }
-
-  const [valueRange, setValueRange] = useState(loadStateFromLocalStorage);
+  const [valueRange, setValueRange] = useState(
+    localStorage.getItem(indicator)
+      ? JSON.parse(localStorage.getItem(indicator))
+      : { from: "", to: "" }
+  );
   const [validationError, setValidationError] = useState("");
 
   function handleRangeFilter() {

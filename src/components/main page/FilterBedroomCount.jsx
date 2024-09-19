@@ -1,12 +1,11 @@
 import { useState } from "react";
 
 export default function FilterBedroomCount({ onSelect }) {
-  function loadStateFromLocalStorage() {
-    const savedState = localStorage.getItem("bedroomCount");
-    return savedState ? JSON.parse(savedState) : "";
-  }
-
-  const [bedroomValue, setBedroomValue] = useState(loadStateFromLocalStorage);
+  const [bedroomValue, setBedroomValue] = useState(
+    localStorage.getItem("bedroomCount")
+      ? JSON.parse(localStorage.getItem("bedroomCount"))
+      : ""
+  );
 
   function handleBedroomFilter() {
     localStorage.setItem("bedroomCount", JSON.stringify(bedroomValue));
