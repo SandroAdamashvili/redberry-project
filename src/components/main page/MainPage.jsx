@@ -28,14 +28,12 @@ export default function MainPage({ data, onSelect }) {
       : ""
   );
   const [priceRange, setPriceRange] = useState(
-    localStorage.getItem("ფასი")
-      ? JSON.parse(localStorage.getItem("ფასი"))
-      : { from: "", to: "" }
+    localStorage.getItem("ფასი") ? JSON.parse(localStorage.getItem("ფასი")) : {}
   );
   const [areaRange, setAreaRange] = useState(
     localStorage.getItem("ფართობი")
       ? JSON.parse(localStorage.getItem("ფართობი"))
-      : { from: "", to: "" }
+      : {}
   );
 
   useEffect(() => {
@@ -89,8 +87,8 @@ export default function MainPage({ data, onSelect }) {
   function handleRemoveFilter(name) {
     // setPriceRange(priceRangeData);
     localStorage.removeItem(name);
-    if (name === "ფასი") setPriceRange("");
-    if (name === "ფართობი") setAreaRange("");
+    if (name === "ფასი") setPriceRange({});
+    if (name === "ფართობი") setAreaRange({});
     if (name === "bedroomCount") setBedroomValue("");
   }
 
@@ -122,10 +120,15 @@ export default function MainPage({ data, onSelect }) {
   function handleRemoveAll() {
     localStorage.clear();
     setCheckedRegions({});
-    setPriceRange("");
-    setAreaRange("");
+    setPriceRange({});
+    setAreaRange({});
     setBedroomValue("");
   }
+
+  console.log(data);
+  console.log(
+    Object.keys(priceRange).length === 0 && Object.keys(areaRange).length === 0
+  );
 
   return (
     <>
@@ -224,19 +227,39 @@ export default function MainPage({ data, onSelect }) {
         handleRemoveAll={handleRemoveAll}
       />
       <div className="mx-[162px] mt-8 flex flex-row flex-wrap gap-5">
-        {data.map((element) => (
-          <RealEstates
-            key={element.id}
-            onClick={() => onSelect(element.id)}
-            image={element.image}
-            price={element.price}
-            cityId={element.city_id}
-            address={element.address}
-            bedrooms={element.bedrooms}
-            area={element.area}
-            zipCode={element.zip_code}
-          />
-        ))}
+        {data.map(
+          (element) =>
+            ((!Object.values(checkedRegions).includes(true) &&
+              Object.keys(priceRange).length === 0 &&
+              Object.keys(areaRange).length === 0 &&
+              bedroomValue === "") ||
+              modalOpen.region ||
+              (!modalOpen.region && checkedRegions[element.city.region.name]) ||
+              modalOpen.priceCategory ||
+              (!modalOpen.priceCategory &&
+                element.price >= priceRange.from &&
+                element.price <= priceRange.to) ||
+              modalOpen.area ||
+              (!modalOpen.area &&
+                element.area >= areaRange.from &&
+                element.area <= areaRange.to) ||
+              modalOpen.bedroomCount ||
+              (!modalOpen.bedroomCount &&
+                element.bedrooms == bedroomValue)) && (
+              <RealEstates
+                key={element.id}
+                onClick={() => onSelect(element.id)}
+                is_rental={element.is_rental}
+                image={element.image}
+                price={element.price}
+                cityName={element.city.name}
+                address={element.address}
+                bedrooms={element.bedrooms}
+                area={element.area}
+                zipCode={element.zip_code}
+              />
+            )
+        )}
       </div>
     </>
   );

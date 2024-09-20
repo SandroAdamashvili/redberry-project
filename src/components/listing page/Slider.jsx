@@ -6,11 +6,25 @@ import IconPrev from "../../assets/icons/icon-left.svg";
 import IconNext from "../../assets/icons/icon-right.svg";
 
 export default function Slider({ children }) {
+  console.log(children);
+
+  const countCards = (arr) => {
+    let count = 0;
+    arr.forEach((val) => {
+      val !== false && count++;
+    });
+    return count;
+  };
+
+  console.log(countCards(children));
   return (
     <div className="swiper-container">
-      <div className="swiper-left hover:cursor-pointer">
-        <img src={IconPrev} alt="previous icon" />
-      </div>
+      {countCards(children) > 4 && (
+        <div className="swiper-left hover:cursor-pointer">
+          <img src={IconPrev} alt="previous icon" />
+        </div>
+      )}
+
       <Swiper
         modules={[Navigation]}
         className="mySwiper"
@@ -24,10 +38,11 @@ export default function Slider({ children }) {
       >
         {children}
       </Swiper>
-
-      <div className="swiper-right hover:cursor-pointer">
-        <img src={IconNext} alt="next icon" />
-      </div>
+      {countCards(children) > 4 && (
+        <div className="swiper-right hover:cursor-pointer">
+          <img src={IconNext} alt="next icon" />
+        </div>
+      )}
     </div>
   );
 }

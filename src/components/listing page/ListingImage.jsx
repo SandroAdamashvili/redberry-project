@@ -1,4 +1,4 @@
-export default function ListingImage({ image, listingDate }) {
+export default function ListingImage({ is_rental, image, listingDate }) {
   const date = new Date(listingDate);
   const formatter = new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
@@ -9,6 +9,9 @@ export default function ListingImage({ image, listingDate }) {
 
   return (
     <div className="w-[839px] flex flex-col gap-[11px]">
+      <p className="absolute px-[26.5px] py-[8.5px] mt-[41px] ml-[41px] text-white text-[20px] bg-[#02152680] rounded-[20px] font-medium">
+        {is_rental ? "იყიდება" : "ქირავდება"}
+      </p>
       <img
         src={image}
         alt="listing image"
