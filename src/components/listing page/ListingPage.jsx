@@ -7,14 +7,20 @@ import ListingAgent from "./ListingAgent.jsx";
 import Slider from "./Slider.jsx";
 import RealEstates from "../main page/RealEstates.jsx";
 import { useEffect, useState, useRef } from "react";
+import {
+  useLoaderData,
+  useParams,
+  Link,
+  redirect,
+  useNavigate,
+} from "react-router-dom";
+import Header from "../main page/Header.jsx";
+import { deleteListing } from "../../http.js";
 
-export default function ListingPage({
-  data,
-  onBack,
-  onDelete,
-  realEstatesData,
-  onSelect,
-}) {
+export default function ListingPage() {
+  useParams();
+  const navigate = useNavigate();
+  const [data, realEstatesData] = useLoaderData();
   const dialog = useRef();
   const [deleteModal, setDeleteModal] = useState(false);
 
@@ -26,7 +32,13 @@ export default function ListingPage({
     }
   });
 
+  const handleDelete = async () => {
+    await deleteListing(data.id);
+    navigate("/");
+  };
+
   console.log(data);
+  console.log(realEstatesData);
 
   return (
     <div>
@@ -52,7 +64,7 @@ export default function ListingPage({
               className="px-4 py-[10px] border bg-[#F93B1D] rounded-[10px] text-white font-semibold outline-none hover:bg-[#DF3014]"
               onClick={() => {
                 setDeleteModal(false);
-                onDelete(data.id);
+                handleDelete();
               }}
             >
               დადასტურება
@@ -60,12 +72,14 @@ export default function ListingPage({
           </div>
         </div>
       </dialog>
-      <img
-        src={BackIcon}
-        alt="back icon"
-        className="ml-[162px] mt-[64px] mb-[29px] hover:cursor-pointer"
-        onClick={onBack}
-      />
+      <Header />
+      <Link to="/">
+        <img
+          src={BackIcon}
+          alt="back icon"
+          className="ml-[162px] mt-[64px] mb-[29px] hover:cursor-pointer"
+        />
+      </Link>
       <div className="w-[1591px] ml-[162px] mb-[53px] font-fira flex flex-row gap-[68px]">
         <ListingImage
           is_rental={data.is_rental}
@@ -107,16 +121,18 @@ export default function ListingPage({
               element.city_id === data.city.id &&
               element.id !== data.id && (
                 <SwiperSlide key={element.id}>
-                  <RealEstates
-                    onClick={() => onSelect(element.id)}
-                    image={element.image}
-                    price={element.price}
-                    cityName={element.city.name}
-                    address={element.address}
-                    bedrooms={element.bedrooms}
-                    area={element.area}
-                    zipCode={element.zip_code}
-                  />
+                  <Link to={`/realEstate/${element.id}`}>
+                    <RealEstates
+                      // onClick={() => onSelect(element.id)}
+                      image={element.image}
+                      price={element.price}
+                      cityName={element.city.name}
+                      address={element.address}
+                      bedrooms={element.bedrooms}
+                      area={element.area}
+                      zipCode={element.zip_code}
+                    />
+                  </Link>
                 </SwiperSlide>
               )
             );

@@ -30,7 +30,7 @@ export default function FilterRegion({
 
   return (
     <div
-      className=" absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white"
+      className=" absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white z-10"
       // ref={divRef}
     >
       <h1 className="mb-[24px]">რეგიონის მიხედვით</h1>

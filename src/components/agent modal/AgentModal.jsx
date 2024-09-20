@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import AgentInput from "./AgentInput";
 import AgentImage from "./AgentImage";
-import { addAgent } from "../../http";
+import { addAgent, fetchAgents } from "../../http";
 import {
   emailValidation,
   imgValidation,
@@ -10,7 +10,7 @@ import {
   phoneValidation,
 } from "../../validation";
 
-export default function ({ open, closeModal }) {
+export default function ({ open, closeModal, updateAgents }) {
   const dialog = useRef();
   const imgRef = useRef();
   const [imgBase64, setImgBase64] = useState(null);
@@ -68,6 +68,8 @@ export default function ({ open, closeModal }) {
       //   console.log(errrrrror);
       // }
       await addAgent(fd);
+      const agents = await fetchAgents();
+      updateAgents(agents);
       closeModal();
     } catch (error) {
       console.error("Error uploading listing data:", error);
@@ -214,6 +216,12 @@ export default function ({ open, closeModal }) {
               onClick={(e) => {
                 closeModal();
                 e.preventDefault();
+                Object.keys(agentError).forEach((v) =>
+                  setAgentError((prevValues) => ({
+                    ...prevValues,
+                    [v]: null,
+                  }))
+                );
               }}
             >
               გაუქმება

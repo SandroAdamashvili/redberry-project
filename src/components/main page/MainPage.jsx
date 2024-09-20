@@ -8,9 +8,17 @@ import FilterNumber from "./FilterNumber.jsx";
 import FilterBedroomCount from "./FilterBedroomCount.jsx";
 import FilterValues from "./FilterValues.jsx";
 import RealEstates from "./RealEstates";
+import AgentModal from "../agent modal/AgentModal.jsx";
+import { Link, useLoaderData } from "react-router-dom";
+import Header from "./Header.jsx";
+import "../../App.css";
+import PlusIcon from "../../assets/icons/PlusIcon.jsx";
 
-export default function MainPage({ data, onSelect }) {
+export default function MainPage({ onSelect, onFormOpen }) {
+  const data = useLoaderData();
+  const [plusHoverColor, setPlusHoverColor] = useState("#F93B1D");
   const [regionsData, setRegionsData] = useState([]);
+  const [agentModalOpen, setAgentModalOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState({
     region: false,
     priceCategory: false,
@@ -132,6 +140,11 @@ export default function MainPage({ data, onSelect }) {
 
   return (
     <>
+      <AgentModal
+        open={agentModalOpen}
+        closeModal={() => setAgentModalOpen(false)}
+      />
+      <Header />
       <div className="w-[1596px] mt-[77px] ml-[162px] flex flex-row justify-between">
         <div className="flex flex-row gap-[24px] p-[6px] border-#DBDBDB border-[1px] rounded-[10px] w-fit">
           <div>
@@ -207,12 +220,20 @@ export default function MainPage({ data, onSelect }) {
           </div>
         </div>
         <div className="flex flex-row gap-4">
-          <button className="px-4 bg-[#F93B1D] text-white rounded-[10px] h-[47px] flex flex-row items-center gap-[2px] font-semibold">
-            <img src={IconPlusWhite} alt="white plus icon" />
-            ლისტინგის დამატება
-          </button>
-          <button className="px-4 border-[#F93B1D] border text-[#F93B1D] rounded-[10px] h-[47px] flex flex-row items-center gap-[2px] font-semibold">
-            <img src={IconPlusOrng} alt="orange plus icon" />
+          <Link to="/listingForm">
+            <button className="px-4 bg-[#F93B1D] text-white rounded-[10px] h-[47px] flex flex-row items-center gap-[2px] font-medium outline-none hover:bg-[#DF3014]">
+              <img src={IconPlusWhite} alt="white plus icon" />
+              ლისტინგის დამატება
+            </button>
+          </Link>
+          <button
+            className="px-4 border-[#F93B1D] border text-[#F93B1D] rounded-[10px] h-[47px] flex flex-row items-center gap-[2px] font-medium outline-none hover:bg-[#F93B1D] hover:text-white"
+            onClick={() => setAgentModalOpen(true)}
+            onMouseEnter={() => setPlusHoverColor("#FFF")}
+            onMouseLeave={() => setPlusHoverColor("#F93B1D")}
+          >
+            {/* <img src={IconPlusOrng} alt="orange plus icon" /> */}
+            <PlusIcon color={plusHoverColor} />
             აგენტის დამატება
           </button>
         </div>
@@ -246,18 +267,21 @@ export default function MainPage({ data, onSelect }) {
               modalOpen.bedroomCount ||
               (!modalOpen.bedroomCount &&
                 element.bedrooms == bedroomValue)) && (
-              <RealEstates
-                key={element.id}
-                onClick={() => onSelect(element.id)}
-                is_rental={element.is_rental}
-                image={element.image}
-                price={element.price}
-                cityName={element.city.name}
-                address={element.address}
-                bedrooms={element.bedrooms}
-                area={element.area}
-                zipCode={element.zip_code}
-              />
+              <Link key={element.id} to={`/realEstate/${element.id}`}>
+                <RealEstates
+                  key={element.id}
+                  // onClick={() => onSelect(element.id)}
+                  to={`/realEstate/${element.id}`}
+                  is_rental={element.is_rental}
+                  image={element.image}
+                  price={element.price}
+                  cityName={element.city.name}
+                  address={element.address}
+                  bedrooms={element.bedrooms}
+                  area={element.area}
+                  zipCode={element.zip_code}
+                />
+              </Link>
             )
         )}
       </div>

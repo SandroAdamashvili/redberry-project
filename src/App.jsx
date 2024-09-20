@@ -13,19 +13,22 @@ function App() {
       ? JSON.parse(localStorage.getItem("listingObj"))
       : null
   );
+  const [realEstateFormOpen, setRealEstateFormOpen] = useState(
+    localStorage.getItem("formIsOpen") ?? false
+  );
   const [realEstateData, setRealEstateData] = useState([]);
 
-  useEffect(() => {
-    async function fetchRealEstateData() {
-      try {
-        const realEstate = await fetchRealEstates();
-        setRealEstateData(realEstate);
-      } catch (error) {
-        console.error("Error fetching real-estates data:", error);
-      }
+  // useEffect(() => {
+  async function fetchRealEstateData() {
+    try {
+      const realEstate = await fetchRealEstates();
+      setRealEstateData(realEstate);
+    } catch (error) {
+      console.error("Error fetching real-estates data:", error);
     }
-    fetchRealEstateData();
-  }, []);
+  }
+  // fetchRealEstateData();
+  // }, []);
 
   async function fetchListingData(id) {
     try {
@@ -51,26 +54,40 @@ function App() {
     }
   }
 
-  return (
-    <>
-      <Header />
-      {/* <RealEstateForm /> */}
-      {listingPageData === null ? (
-        <MainPage data={realEstateData} onSelect={fetchListingData} />
-      ) : (
-        <ListingPage
-          data={listingPageData}
-          onBack={() => {
-            setListingPageData(null);
-            localStorage.removeItem("listingObj");
-          }}
-          onDelete={deleteRealEstateListing}
-          realEstatesData={realEstateData}
-          onSelect={fetchListingData}
-        />
-      )}
-    </>
-  );
+  // return (
+  //   <>
+  //     <Header />
+  //     {/* <RealEstateForm /> */}
+  //     {realEstateFormOpen ? (
+  //       <RealEstateForm
+  //         onBack={() => {
+  //           setRealEstateFormOpen(false);
+  //           localStorage.clear();
+  //         }}
+  //       />
+  //     ) : listingPageData === null ? (
+  //       <MainPage
+  //         data={realEstateData}
+  //         onSelect={fetchListingData}
+  //         onFormOpen={() => {
+  //           setRealEstateFormOpen(true);
+  //           localStorage.setItem("formIsOpen", true);
+  //         }}
+  //       />
+  //     ) : (
+  //       <ListingPage
+  //         data={listingPageData}
+  //         onBack={() => {
+  //           setListingPageData(null);
+  //           localStorage.removeItem("listingObj");
+  //         }}
+  //         onDelete={deleteRealEstateListing}
+  //         realEstatesData={realEstateData}
+  //         onSelect={fetchListingData}
+  //       />
+  //     )}
+  //   </>
+  // );
 }
 
 export default App;

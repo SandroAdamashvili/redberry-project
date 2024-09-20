@@ -17,8 +17,9 @@ import {
 } from "../../validation.js";
 import ImageUpload from "./ImageUpload.jsx";
 import AgentModal from "../agent modal/AgentModal.jsx";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function RealEstateForm() {
+export default function RealEstateForm({ onBack }) {
   const imgRef = useRef();
   const [imgBase64, setImgBase64] = useState(
     localStorage.getItem("imgBase64") ?? null
@@ -27,6 +28,7 @@ export default function RealEstateForm() {
   const [regionsData, setRegionsData] = useState([]);
   const [citiesData, setCitiesData] = useState([]);
   const [agentsData, setAgentsData] = useState([]);
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
     region_id: localStorage.getItem("region_id") ?? "აირჩიე რეგიონი",
     price: localStorage.getItem("price") ?? "",
@@ -122,6 +124,7 @@ export default function RealEstateForm() {
 
     try {
       await addListing(fd);
+      navigate("/");
     } catch (error) {
       console.error("Error uploading listing data:", error);
     }
@@ -194,9 +197,17 @@ export default function RealEstateForm() {
   console.log(inputValue);
   // console.log("selectedFile", inputValue.image);
 
+  function updateAgents(agents) {
+    setAgentsData(agents);
+  }
+
   return (
     <div className="mx-auto w-[790px] flex flex-col justify-center mt-[62px] font-fira">
-      <AgentModal open={modalOpen} closeModal={() => setModalOpen(false)} />
+      <AgentModal
+        open={modalOpen}
+        closeModal={() => setModalOpen(false)}
+        updateAgents={updateAgents}
+      />
       <h1 className=" text-center mb-[61px] text-[32px] text-[#021526] font-medium">
         ლისტინგის დამატება
       </h1>
@@ -334,17 +345,33 @@ export default function RealEstateForm() {
       </form>
       <div className="mt-[80px] flex flex-row justify-end gap-[15px] mb-[87px]">
         <button
-          onClick={() => setModalOpen(true)}
+          onClick={() => {
+            setInputValue({
+              region_id: "აირჩიე რეგიონი",
+              price: "",
+              zip_code: "",
+              area: "",
+              city_id: "აირჩიე ქალაქი",
+              address: "",
+              agent_id: "აირჩიე აგენტი",
+              bedrooms: "",
+              is_rental: 0,
+              image: null,
+              description: "",
+            });
+          }}
           className="px-4 py-[10px] border border-[#F93B1D] rounded-[10px] text-[#F93B1D] font-semibold hover:bg-[#F93B1D] hover:text-white"
         >
           გაუქმება
         </button>
+        {/* <Link to="/"> */}
         <button
           className="px-4 py-[10px] border bg-[#F93B1D] rounded-[10px] text-white font-semibold hover:bg-[#DF3014]"
           onClick={() => uploadData(inputValue)}
         >
           დაამატე ლისტინგი
         </button>
+        {/* </Link> */}
       </div>
     </div>
   );
