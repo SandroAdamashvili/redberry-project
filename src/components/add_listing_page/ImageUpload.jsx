@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import UploadIcon from "../../assets/icons/plus-circle.svg";
 import RemoveIcon from "../../assets/icons/remove-icon.svg";
-import Tick from "../../assets/icons/tick.svg";
+import TickIcon from "../../assets/icons/TickIcon";
 
 const ImageUpload = forwardRef(function ImageUpload(
   { handleImgChange, onChooseFile, imgValue, onRemove, error },
@@ -51,9 +51,9 @@ const ImageUpload = forwardRef(function ImageUpload(
       {error && (
         <label
           htmlFor="imgUpload"
-          className="text-[14px] font-normal flex flex-row gap-1 text-[#F93B1D]"
+          className="text-[14px] font-normal flex flex-row items-center gap-1 text-[#F93B1D]"
         >
-          <img src={Tick} alt="tick icon" />
+          <TickIcon color="#F93B1D" />
           ატვირთეთ ვალიდური სურათი. სურათი არ უნდა აღემატებოდეს 1mb-ს
         </label>
       )}

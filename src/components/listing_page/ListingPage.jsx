@@ -7,13 +7,7 @@ import ListingAgent from "./ListingAgent.jsx";
 import Slider from "./Slider.jsx";
 import RealEstates from "../main_page/RealEstates.jsx";
 import { useEffect, useState, useRef } from "react";
-import {
-  useLoaderData,
-  useParams,
-  Link,
-  redirect,
-  useNavigate,
-} from "react-router-dom";
+import { useLoaderData, useParams, Link, useNavigate } from "react-router-dom";
 import Header from "../main_page/Header.jsx";
 import { deleteListing } from "../../http.js";
 
@@ -23,6 +17,19 @@ export default function ListingPage() {
   const [data, realEstatesData] = useLoaderData();
   const dialog = useRef();
   const [deleteModal, setDeleteModal] = useState(false);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dialog.current && !dialog.current.contains(event.target)) {
+        setDeleteModal(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dialog]);
 
   useEffect(() => {
     if (deleteModal) {
@@ -36,9 +43,6 @@ export default function ListingPage() {
     await deleteListing(data.id);
     navigate("/");
   };
-
-  console.log(data);
-  console.log(realEstatesData);
 
   return (
     <div>

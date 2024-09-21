@@ -1,5 +1,3 @@
-import { useState, useEffect } from "react";
-import { fetchRealEstates } from "../../http.js";
 import MapIcon from "../../assets/icons/location-marker.svg";
 import BedIcon from "../../assets/icons/bed.svg";
 import areaIcon from "../../assets/icons/area.svg";

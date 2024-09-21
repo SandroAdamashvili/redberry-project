@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import FilterItem from "./FilterItem";
 
 export default function FilterValues({
@@ -10,8 +9,6 @@ export default function FilterValues({
   handleRemoveFilter,
   handleRemoveAll,
 }) {
-  console.log(regions);
-
   return (
     <div className="flex flex-row mx-[162px] mt-4 gap-2">
       <ul className="flex flex-row gap-2">

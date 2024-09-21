@@ -1,28 +1,12 @@
-import { forwardRef, useEffect } from "react";
+import { forwardRef } from "react";
 import UploadIcon from "../../assets/icons/plus-circle.svg";
 import RemoveIcon from "../../assets/icons/remove-icon.svg";
 import Tick from "../../assets/icons/tick.svg";
 
 const AgentImage = forwardRef(function AgentImage(
-  {
-    imgValue,
-    handleImgChange,
-    onChooseFile,
-    onRemove,
-    onValidation,
-    validationFn,
-    error,
-    selectedFile,
-  },
+  { imgValue, handleImgChange, onChooseFile, onRemove, error },
   ref
 ) {
-  function handleChange(event) {
-    handleImgChange(event);
-    // onValidation();
-    // onValidation("avatar", event.target.value, validationFn);
-  }
-
-  console.log(error);
   return (
     <div className="flex flex-col w-full">
       <label
@@ -36,7 +20,7 @@ const AgentImage = forwardRef(function AgentImage(
           type="file"
           className=" hidden"
           ref={ref}
-          onChange={handleChange}
+          onChange={handleImgChange}
         />
       )}
 

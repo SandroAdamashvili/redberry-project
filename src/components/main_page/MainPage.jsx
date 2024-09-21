@@ -1,5 +1,4 @@
 import FilterName from "./FilterName.jsx";
-import IconPlusOrng from "../../assets/icons/icon-plus-orng.svg";
 import IconPlusWhite from "../../assets/icons/icon-plus-white.svg";
 import { fetchRegions } from "../../http.js";
 import { useEffect, useState } from "react";
@@ -93,7 +92,6 @@ export default function MainPage() {
   }
 
   function handleRemoveFilter(name) {
-    // setPriceRange(priceRangeData);
     localStorage.removeItem(name);
     if (name === "ფასი") setPriceRange({});
     if (name === "ფართობი") setAreaRange({});
@@ -132,11 +130,6 @@ export default function MainPage() {
     setAreaRange({});
     setBedroomValue("");
   }
-
-  console.log(data);
-  console.log(
-    Object.keys(priceRange).length === 0 && Object.keys(areaRange).length === 0
-  );
 
   return (
     <>
@@ -233,7 +226,6 @@ export default function MainPage() {
             onMouseEnter={() => setPlusHoverColor("#FFF")}
             onMouseLeave={() => setPlusHoverColor("#F93B1D")}
           >
-            {/* <img src={IconPlusOrng} alt="orange plus icon" /> */}
             <PlusIcon color={plusHoverColor} />
             აგენტის დამატება
           </button>
@@ -271,7 +263,6 @@ export default function MainPage() {
               <Link key={element.id} to={`/realEstate/${element.id}`}>
                 <RealEstates
                   key={element.id}
-                  // onClick={() => onSelect(element.id)}
                   to={`/realEstate/${element.id}`}
                   is_rental={element.is_rental}
                   image={element.image}

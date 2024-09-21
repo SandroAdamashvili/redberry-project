@@ -1,38 +1,16 @@
-import { useState, useEffect, useRef } from "react";
-
 export default function FilterRegion({
   regionsData,
   onSelect,
   checkedRegions,
   handleChange,
 }) {
-  // const divRef = useRef(null);
-
-  // useEffect(() => {
-  //   function handleClickOutside(event) {
-  //     if (divRef.current && !divRef.current.contains(event.target)) {
-  //       onSelect();
-  //     }
-  //   }
-
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [divRef]);
-
-  // console.log(checkedRegions);
-
   function handleRegionFilter() {
     localStorage.setItem("checkedRegions", JSON.stringify(checkedRegions));
     onSelect();
   }
 
   return (
-    <div
-      className=" absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white z-10"
-      // ref={divRef}
-    >
+    <div className=" absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white z-10">
       <h1 className="mb-[24px]">რეგიონის მიხედვით</h1>
       <ul className="font-normal text-[14px] h-[128px] grid grid-cols-3 gap-x-[50px] mb-8">
         {regionsData.map((region) => {

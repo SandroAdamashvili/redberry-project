@@ -4,9 +4,7 @@ import AgentImage from "./AgentImage";
 import { addAgent, fetchAgents } from "../../http";
 import {
   emailValidation,
-  imgValidation,
   minTwoSymbols,
-  onlyIntegers,
   phoneValidation,
 } from "../../validation";
 
@@ -29,8 +27,6 @@ export default function ({ open, closeModal, updateAgents, pageName }) {
     phone: null,
     avatar: agentInfo.avatar !== null && agentInfo.avatar.size > 1000000,
   });
-
-  agentInfo.avatar !== null && console.log(agentInfo.avatar.size);
 
   useEffect(() => {
     if (open) {
@@ -64,9 +60,6 @@ export default function ({ open, closeModal, updateAgents, pageName }) {
     console.log(fd.get("name"));
 
     try {
-      // if (Object.values(agentError).find(null || true)) {
-      //   console.log(errrrrror);
-      // }
       await addAgent(fd);
 
       const agents = await fetchAgents();
@@ -93,17 +86,6 @@ export default function ({ open, closeModal, updateAgents, pageName }) {
       };
     });
   }
-
-  // function handleImgValidation() {
-  //   agentInfo.avatar !== null &&
-  //     setAgentError((prevValues) => {
-  //       const valueError = agentInfo.avatar.size > 1000000;
-  //       return {
-  //         ...prevValues,
-  //         avatar: valueError,
-  //       };
-  //     });
-  // }
 
   function handleImgChange(event) {
     event.preventDefault();
@@ -142,16 +124,6 @@ export default function ({ open, closeModal, updateAgents, pageName }) {
       avatar: null,
     }));
   }
-
-  // function handleSubmit() {
-  //   for (const key in agentError) {
-  //     if ()
-  //   }
-  // }
-
-  // console.log(agentError);
-
-  // console.log(agentInfo);
 
   return (
     <dialog ref={dialog} className="modal w-[1009px] py-[87px] px-[105px]">
@@ -208,9 +180,7 @@ export default function ({ open, closeModal, updateAgents, pageName }) {
               handleImgChange={handleImgChange}
               onChooseFile={onChooseFile}
               onRemove={onRemove}
-              // onValidation={handleImgValidation}
               error={agentError.avatar}
-              // validationFn={imgValidation}
             />
           </div>
           <div className="mt-[94px] w-full flex flex-row justify-end gap-[15px]">
@@ -225,6 +195,7 @@ export default function ({ open, closeModal, updateAgents, pageName }) {
                     [v]: null,
                   }))
                 );
+                setImgBase64(null);
               }}
             >
               გაუქმება

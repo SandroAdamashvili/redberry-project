@@ -17,7 +17,8 @@ import {
 } from "../../validation.js";
 import ImageUpload from "./ImageUpload.jsx";
 import AgentModal from "../agent_modal/AgentModal.jsx";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Header from "../main_page/Header.jsx";
 
 export default function RealEstateForm() {
   const imgRef = useRef();
@@ -43,23 +44,18 @@ export default function RealEstateForm() {
     description: localStorage.getItem("description") ?? "",
   });
 
-  const [valueError, setValueError] = useState(
-    // localStorage.getItem("valueError")
-    //   ? JSON.parse(localStorage.getItem("valueError"))
-    //   :
-    {
-      address: "",
-      zip_code: null,
-      region_id: null,
-      city_id: null,
-      price: null,
-      area: null,
-      bedrooms: null,
-      description: "",
-      image: null,
-      agent_id: null,
-    }
-  );
+  const [valueError, setValueError] = useState({
+    address: "",
+    zip_code: null,
+    region_id: null,
+    city_id: null,
+    price: null,
+    area: null,
+    bedrooms: null,
+    description: "",
+    image: null,
+    agent_id: null,
+  });
 
   useEffect(() => {
     async function fetchRegionsData() {
@@ -216,7 +212,6 @@ export default function RealEstateForm() {
           ...prevValues,
           image: file,
         }));
-        // localStorage.getItem("image") &&
         localStorage.setItem("image", file.name);
         let reader = new FileReader();
         reader.onloadend = function () {
@@ -245,10 +240,6 @@ export default function RealEstateForm() {
     localStorage.removeItem("imgBase64");
     localStorage.removeItem("image");
   }
-
-  console.log("input validation", valueError);
-  console.log(inputValue);
-  // console.log("selectedFile", inputValue.image);
 
   function updateAgents(agents) {
     setAgentsData(agents);
@@ -285,171 +276,173 @@ export default function RealEstateForm() {
   }
 
   return (
-    <div className="mx-auto w-[790px] flex flex-col justify-center mt-[62px] font-fira">
-      <AgentModal
-        open={modalOpen}
-        closeModal={() => setModalOpen(false)}
-        updateAgents={updateAgents}
-        pageName="listingForm"
-      />
-      <h1 className=" text-center mb-[61px] text-[32px] text-[#021526] font-medium">
-        ლისტინგის დამატება
-      </h1>
-      <form>
-        <div>
-          <h2 className="mb-2 text-[16px] font-medium text-[#1A1A1F]">
-            გარიგების ტიპი *
-          </h2>
-          <div className="flex flex-row gap-[84px] text-[14px]">
-            <InputRadio
-              title="იყიდება"
-              onChecked={inputValue.is_rental == 0}
-              onSelect={() => handleValueChange("is_rental", 0)}
-            />
-            <InputRadio
-              title="ქირავდება"
-              onChecked={inputValue.is_rental == 1}
-              onSelect={() => handleValueChange("is_rental", 1)}
-            />
-          </div>
-        </div>
-        <div className="mt-[80px] flex flex-col gap-[22px]">
-          <h2 className="text-[16px] font-medium text-[#1A1A1F]">მდებარეობა</h2>
-          <div className="flex flex-row w-full gap-5">
-            <Input
-              title="მისამართი *"
-              validationText="მინიმუმ 2 სიმბოლო"
-              inputType="text"
-              onValidation={handleValidation}
-              inputName="address"
-              validationFn={minTwoSymbols}
-              error={valueError}
-              onInputChange={handleValueChange}
-            />
-            <Input
-              title="საფოსტო ინდექსი *"
-              validationText="მხოლოდ რიცხვები"
-              inputType="text"
-              inputName="zip_code"
-              onValidation={handleValidation}
-              validationFn={onlyNumbers}
-              error={valueError}
-              onInputChange={handleValueChange}
-            />
-          </div>
-          <div className="flex flex-row w-full gap-5">
-            <InputSelect
-              inputName="region_id"
-              label="რეგიონი"
-              title="რეგიონი"
-              data={regionsData}
-              onSelect={handleValueChange}
-              error={valueError.region_id}
-              selectValidation={() => selectValidation("region_id")}
-            />
-            {inputValue.region_id !== "აირჩიე რეგიონი" && (
-              <InputSelect
-                inputName="city_id"
-                label="ქალაქი"
-                title="ქალაქი"
-                data={citiesData.filter(
-                  (city) => city["region_id"] == inputValue.region_id
-                )}
-                onSelect={handleValueChange}
-                error={valueError.city_id}
-                selectValidation={() => selectValidation("city_id")}
+    <>
+      <Header />
+      <div className="mx-auto w-[790px] flex flex-col justify-center mt-[62px] font-fira">
+        <AgentModal
+          open={modalOpen}
+          closeModal={() => setModalOpen(false)}
+          updateAgents={updateAgents}
+          pageName="listingForm"
+        />
+        <h1 className=" text-center mb-[61px] text-[32px] text-[#021526] font-medium">
+          ლისტინგის დამატება
+        </h1>
+        <form>
+          <div>
+            <h2 className="mb-2 text-[16px] font-medium text-[#1A1A1F]">
+              გარიგების ტიპი *
+            </h2>
+            <div className="flex flex-row gap-[84px] text-[14px]">
+              <InputRadio
+                title="იყიდება"
+                onChecked={inputValue.is_rental == 0}
+                onSelect={() => handleValueChange("is_rental", 0)}
               />
-            )}
+              <InputRadio
+                title="ქირავდება"
+                onChecked={inputValue.is_rental == 1}
+                onSelect={() => handleValueChange("is_rental", 1)}
+              />
+            </div>
           </div>
-        </div>
-        <div className="mt-[80px] flex flex-col gap-[22px]">
-          <h2 className="text-[16px] font-medium text-[#1A1A1F]">
-            ბინის დეტალები
-          </h2>
-          <div className="flex flex-row w-full gap-5">
+          <div className="mt-[80px] flex flex-col gap-[22px]">
+            <h2 className="text-[16px] font-medium text-[#1A1A1F]">
+              მდებარეობა
+            </h2>
+            <div className="flex flex-row w-full gap-5">
+              <Input
+                title="მისამართი *"
+                validationText="მინიმუმ 2 სიმბოლო"
+                inputType="text"
+                onValidation={handleValidation}
+                inputName="address"
+                validationFn={minTwoSymbols}
+                error={valueError}
+                onInputChange={handleValueChange}
+              />
+              <Input
+                title="საფოსტო ინდექსი *"
+                validationText="მხოლოდ რიცხვები"
+                inputType="text"
+                inputName="zip_code"
+                onValidation={handleValidation}
+                validationFn={onlyNumbers}
+                error={valueError}
+                onInputChange={handleValueChange}
+              />
+            </div>
+            <div className="flex flex-row w-full gap-5">
+              <InputSelect
+                inputName="region_id"
+                label="რეგიონი"
+                title="რეგიონი"
+                data={regionsData}
+                onSelect={handleValueChange}
+                error={valueError.region_id}
+                selectValidation={() => selectValidation("region_id")}
+              />
+              {inputValue.region_id !== "აირჩიე რეგიონი" && (
+                <InputSelect
+                  inputName="city_id"
+                  label="ქალაქი"
+                  title="ქალაქი"
+                  data={citiesData.filter(
+                    (city) => city["region_id"] == inputValue.region_id
+                  )}
+                  onSelect={handleValueChange}
+                  error={valueError.city_id}
+                  selectValidation={() => selectValidation("city_id")}
+                />
+              )}
+            </div>
+          </div>
+          <div className="mt-[80px] flex flex-col gap-[22px]">
+            <h2 className="text-[16px] font-medium text-[#1A1A1F]">
+              ბინის დეტალები
+            </h2>
+            <div className="flex flex-row w-full gap-5">
+              <Input
+                title="ფასი *"
+                validationText="მხოლოდ რიცხვები"
+                inputType="text"
+                inputName="price"
+                onValidation={handleValidation}
+                validationFn={onlyNumbers}
+                error={valueError}
+                onInputChange={handleValueChange}
+              />
+              <Input
+                title="ფართობი *"
+                validationText="მხოლოდ რიცხვები"
+                inputType="text"
+                inputName="area"
+                onValidation={handleValidation}
+                validationFn={onlyNumbers}
+                error={valueError}
+                onInputChange={handleValueChange}
+              />
+            </div>
             <Input
-              title="ფასი *"
+              title="საძინებლების რაოდენობა *"
               validationText="მხოლოდ რიცხვები"
               inputType="text"
-              inputName="price"
+              inputName="bedrooms"
               onValidation={handleValidation}
-              validationFn={onlyNumbers}
+              validationFn={onlyIntegers}
               error={valueError}
               onInputChange={handleValueChange}
             />
             <Input
-              title="ფართობი *"
-              validationText="მხოლოდ რიცხვები"
-              inputType="text"
-              inputName="area"
+              title="აღწერა *"
+              validationText="მინიმუმ ხუთი სიტყვა"
+              inputType="textarea"
+              inputName="description"
               onValidation={handleValidation}
-              validationFn={onlyNumbers}
+              validationFn={minFiveWords}
               error={valueError}
               onInputChange={handleValueChange}
             />
-          </div>
-          <Input
-            title="საძინებლების რაოდენობა *"
-            validationText="მხოლოდ რიცხვები"
-            inputType="text"
-            inputName="bedrooms"
-            onValidation={handleValidation}
-            validationFn={onlyIntegers}
-            error={valueError}
-            onInputChange={handleValueChange}
-          />
-          <Input
-            title="აღწერა *"
-            validationText="მინიმუმ ხუთი სიტყვა"
-            inputType="textarea"
-            inputName="description"
-            onValidation={handleValidation}
-            validationFn={minFiveWords}
-            error={valueError}
-            onInputChange={handleValueChange}
-          />
-          <ImageUpload
-            ref={imgRef}
-            // selectedFile={imgFile}
-            handleImgChange={handleImgChange}
-            onChooseFile={onChooseFile}
-            imgValue={imgBase64}
-            onRemove={onRemove}
-            error={valueError.image}
-          />
-        </div>
-        <div className="mt-[80px] flex flex-col gap-[22px]">
-          <h2 className="text-[16px] font-medium text-[#1A1A1F]">აგენტი</h2>
-          <div className="flex flex-row w-full gap-5">
-            <AgentSelect
-              inputName="agent_id"
-              label="აირჩიე"
-              title="აგენტი"
-              data={agentsData}
-              onSelect={handleValueChange}
-              openModal={() => setModalOpen(true)}
-              error={valueError.agent_id}
-              selectValidation={() => selectValidation("agent_id")}
+            <ImageUpload
+              ref={imgRef}
+              handleImgChange={handleImgChange}
+              onChooseFile={onChooseFile}
+              imgValue={imgBase64}
+              onRemove={onRemove}
+              error={valueError.image}
             />
           </div>
+          <div className="mt-[80px] flex flex-col gap-[22px]">
+            <h2 className="text-[16px] font-medium text-[#1A1A1F]">აგენტი</h2>
+            <div className="flex flex-row w-full gap-5">
+              <AgentSelect
+                inputName="agent_id"
+                label="აირჩიე"
+                title="აგენტი"
+                data={agentsData}
+                onSelect={handleValueChange}
+                openModal={() => setModalOpen(true)}
+                error={valueError.agent_id}
+                selectValidation={() => selectValidation("agent_id")}
+              />
+            </div>
+          </div>
+        </form>
+        <div className="mt-[80px] flex flex-row justify-end gap-[15px] mb-[87px]">
+          <button
+            onClick={onClear}
+            className="px-4 py-[10px] border border-[#F93B1D] rounded-[10px] text-[#F93B1D] font-semibold hover:bg-[#F93B1D] hover:text-white"
+          >
+            გაუქმება
+          </button>
+          <button
+            className="px-4 py-[10px] border bg-[#F93B1D] rounded-[10px] text-white font-semibold hover:bg-[#DF3014]"
+            onClick={() => uploadData(inputValue)}
+          >
+            დაამატე ლისტინგი
+          </button>
         </div>
-      </form>
-      <div className="mt-[80px] flex flex-row justify-end gap-[15px] mb-[87px]">
-        <button
-          onClick={onClear}
-          className="px-4 py-[10px] border border-[#F93B1D] rounded-[10px] text-[#F93B1D] font-semibold hover:bg-[#F93B1D] hover:text-white"
-        >
-          გაუქმება
-        </button>
-        {/* <Link to="/"> */}
-        <button
-          className="px-4 py-[10px] border bg-[#F93B1D] rounded-[10px] text-white font-semibold hover:bg-[#DF3014]"
-          onClick={() => uploadData(inputValue)}
-        >
-          დაამატე ლისტინგი
-        </button>
-        {/* </Link> */}
       </div>
-    </div>
+    </>
   );
 }
