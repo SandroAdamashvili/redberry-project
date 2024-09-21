@@ -25,7 +25,7 @@ export default function RealEstates({
       <img
         src={image}
         alt="real estate image"
-        className="h-[307px] rounded-t-[14px]"
+        className="h-[307px] w-full rounded-t-[14px]"
       />
       <div className="px-[25px] py-[22px]">
         <h1 className="text-[28px] text-[#021526] font-bold">{price} ₾</h1>

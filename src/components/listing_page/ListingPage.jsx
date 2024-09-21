@@ -127,7 +127,6 @@ export default function ListingPage() {
                 <SwiperSlide key={element.id}>
                   <Link to={`/realEstate/${element.id}`}>
                     <RealEstates
-                      // onClick={() => onSelect(element.id)}
                       image={element.image}
                       price={element.price}
                       cityName={element.city.name}
