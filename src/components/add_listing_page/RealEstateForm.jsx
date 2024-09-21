@@ -290,6 +290,7 @@ export default function RealEstateForm() {
         open={modalOpen}
         closeModal={() => setModalOpen(false)}
         updateAgents={updateAgents}
+        pageName="listingForm"
       />
       <h1 className=" text-center mb-[61px] text-[32px] text-[#021526] font-medium">
         ლისტინგის დამატება

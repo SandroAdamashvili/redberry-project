@@ -118,7 +118,7 @@ export default function ListingPage() {
         <Slider>
           {realEstatesData.map((element) => {
             return (
-              element.city_id === data.city.id &&
+              element.city.region_id === data.city.region_id &&
               element.id !== data.id && (
                 <SwiperSlide key={element.id}>
                   <Link to={`/realEstate/${element.id}`}>

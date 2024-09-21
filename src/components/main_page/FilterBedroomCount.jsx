@@ -8,7 +8,7 @@ export default function FilterBedroomCount({
   const [validationError, setValidationError] = useState(false);
 
   function handleBedroomFilter() {
-    if (bedroomValue < 0 && Math.floor(bedroomValue) !== bedroomValue) {
+    if (bedroomValue < 0 || bedroomValue % 1 > 0) {
       setValidationError(true);
       return;
     }

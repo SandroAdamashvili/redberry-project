@@ -14,7 +14,7 @@ import Header from "./Header.jsx";
 import "../../App.css";
 import PlusIcon from "../../assets/icons/PlusIcon.jsx";
 
-export default function MainPage({ onSelect, onFormOpen }) {
+export default function MainPage() {
   const data = useLoaderData();
   const [plusHoverColor, setPlusHoverColor] = useState("#F93B1D");
   const [regionsData, setRegionsData] = useState([]);
@@ -143,6 +143,7 @@ export default function MainPage({ onSelect, onFormOpen }) {
       <AgentModal
         open={agentModalOpen}
         closeModal={() => setAgentModalOpen(false)}
+        pageName="mainPage"
       />
       <Header />
       <div className="w-[1596px] mt-[77px] ml-[162px] flex flex-row justify-between">

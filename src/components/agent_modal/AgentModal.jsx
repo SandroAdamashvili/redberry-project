@@ -10,7 +10,7 @@ import {
   phoneValidation,
 } from "../../validation";
 
-export default function ({ open, closeModal, updateAgents }) {
+export default function ({ open, closeModal, updateAgents, pageName }) {
   const dialog = useRef();
   const imgRef = useRef();
   const [imgBase64, setImgBase64] = useState(null);
@@ -68,8 +68,9 @@ export default function ({ open, closeModal, updateAgents }) {
       //   console.log(errrrrror);
       // }
       await addAgent(fd);
+
       const agents = await fetchAgents();
-      updateAgents(agents);
+      pageName === "listingForm" && updateAgents(agents);
       closeModal();
     } catch (error) {
       console.error("Error uploading listing data:", error);
