@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Input from "./Input.jsx";
 import InputSelect from "./InputSelect.jsx";
-import InputRadio from "./inputRadio.jsx";
+import InputRadio from "./InputRadio.jsx";
 import AgentSelect from "./AgentSelect.jsx";
 import {
   addListing,
