@@ -247,7 +247,7 @@ export default function MainPage({ onSelect, onFormOpen }) {
         handleRemoveFilter={handleRemoveFilter}
         handleRemoveAll={handleRemoveAll}
       />
-      <div className="mx-[162px] mt-8 flex flex-row flex-wrap gap-5">
+      <div className="mx-[150px] mt-8 flex flex-row flex-wrap gap-5">
         {data.map(
           (element) =>
             ((!Object.values(checkedRegions).includes(true) &&

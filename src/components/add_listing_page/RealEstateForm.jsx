@@ -19,7 +19,7 @@ import ImageUpload from "./ImageUpload.jsx";
 import AgentModal from "../agent_modal/AgentModal.jsx";
 import { Link, useNavigate } from "react-router-dom";
 
-export default function RealEstateForm({ onBack }) {
+export default function RealEstateForm() {
   const imgRef = useRef();
   const [imgBase64, setImgBase64] = useState(
     localStorage.getItem("imgBase64") ?? null

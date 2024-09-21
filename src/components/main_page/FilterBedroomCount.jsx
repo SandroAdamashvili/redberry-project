@@ -5,13 +5,19 @@ export default function FilterBedroomCount({
   onSelect,
   handleBedroomChange,
 }) {
+  const [validationError, setValidationError] = useState(false);
+
   function handleBedroomFilter() {
+    if (bedroomValue < 0 && Math.floor(bedroomValue) !== bedroomValue) {
+      setValidationError(true);
+      return;
+    }
     localStorage.setItem("bedroomCount", JSON.stringify(bedroomValue));
     onSelect();
   }
 
   return (
-    <div className="absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white">
+    <div className="absolute mt-4 text-base font-medium p-6 border border-[#DBDBDB] rounded-[10px] bg-white z-10">
       <h1 className="mb-6">საძინებლების რაოდენობა</h1>
       <input
         type="number"
@@ -19,6 +25,9 @@ export default function FilterBedroomCount({
         onChange={handleBedroomChange}
         value={bedroomValue}
       />
+      {validationError && (
+        <p className="my-4 text-red-500">შეიყვანეთ ვალიდური მონაცემები</p>
+      )}
       <span className="w-full flex justify-end">
         <button
           className="px-[14px] py-2 bg-[#F93B1D] text-white rounded-lg"
