@@ -119,7 +119,18 @@ export default function RealEstateForm({ onBack }) {
   async function uploadData(value) {
     let invalid = false;
     setValueError(JSON.parse(localStorage.getItem("valueError")));
+
     for (const key in valueError) {
+      if (
+        inputValue[key] !== "აირჩიე რეგიონი" ||
+        inputValue[key] !== "აირჩიე ქალაქი" ||
+        inputValue[key] !== "აირჩიე აგენტი"
+      ) {
+        setValueError((prevValues) => ({
+          ...prevValues,
+          [key]: false,
+        }));
+      }
       if (
         valueError[key] === true ||
         inputValue[key] === null ||
@@ -171,13 +182,8 @@ export default function RealEstateForm({ onBack }) {
         [name]: localStorage.getItem(name),
       };
     });
+
     localStorage.setItem("valueError", JSON.stringify(valueError));
-    // if (name === "city_id" || name === "region_id" || name === "agent_id") {
-    //   setValueError((prevValues) => ({
-    //     ...prevValues,
-    //     [name]: false,
-    //   }));
-    // }
   }
 
   function selectValidation(name) {

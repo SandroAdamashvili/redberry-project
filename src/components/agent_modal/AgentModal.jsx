@@ -148,9 +148,9 @@ export default function ({ open, closeModal, updateAgents }) {
   //   }
   // }
 
-  console.log(agentError);
+  // console.log(agentError);
 
-  console.log(agentInfo);
+  // console.log(agentInfo);
 
   return (
     <dialog ref={dialog} className="modal w-[1009px] py-[87px] px-[105px]">
