@@ -273,6 +273,7 @@ export default function RealEstateForm() {
       image: null,
       agent_id: null,
     });
+    navigate("/");
   }
 
   return (
