@@ -16,7 +16,7 @@ import {
   onlyNumbers,
 } from "../../validation.js";
 import ImageUpload from "./ImageUpload.jsx";
-import AgentModal from "../agent modal/AgentModal.jsx";
+import AgentModal from "../agent_modal/AgentModal.jsx";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function RealEstateForm({ onBack }) {

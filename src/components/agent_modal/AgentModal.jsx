@@ -153,7 +153,7 @@ export default function ({ open, closeModal, updateAgents }) {
   console.log(agentInfo);
 
   return (
-    <dialog ref={dialog} className="modal">
+    <dialog ref={dialog} className="modal w-[1009px] py-[87px] px-[105px]">
       {open ? (
         <div className="flex flex-col items-center text-[#021526] font-fira">
           <h1 className="text-[32px] mb-[61px] font-semibold">

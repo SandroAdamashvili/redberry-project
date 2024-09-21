@@ -8,7 +8,7 @@ import FilterNumber from "./FilterNumber.jsx";
 import FilterBedroomCount from "./FilterBedroomCount.jsx";
 import FilterValues from "./FilterValues.jsx";
 import RealEstates from "./RealEstates";
-import AgentModal from "../agent modal/AgentModal.jsx";
+import AgentModal from "../agent_modal/AgentModal.jsx";
 import { Link, useLoaderData } from "react-router-dom";
 import Header from "./Header.jsx";
 import "../../App.css";

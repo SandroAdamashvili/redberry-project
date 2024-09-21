@@ -5,7 +5,7 @@ import ListingImage from "./ListingImage.jsx";
 import ListingData from "./ListingData.jsx";
 import ListingAgent from "./ListingAgent.jsx";
 import Slider from "./Slider.jsx";
-import RealEstates from "../main page/RealEstates.jsx";
+import RealEstates from "../main_page/RealEstates.jsx";
 import { useEffect, useState, useRef } from "react";
 import {
   useLoaderData,
@@ -14,7 +14,7 @@ import {
   redirect,
   useNavigate,
 } from "react-router-dom";
-import Header from "../main page/Header.jsx";
+import Header from "../main_page/Header.jsx";
 import { deleteListing } from "../../http.js";
 
 export default function ListingPage() {
