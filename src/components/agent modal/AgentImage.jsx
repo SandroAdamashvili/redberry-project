@@ -41,7 +41,9 @@ const AgentImage = forwardRef(function AgentImage(
       )}
 
       <button
-        className="w-full border border-dashed border-[#2D3648] h-[120px] rounded-lg flex items-center justify-center"
+        className={`w-full border border-dashed ${
+          error ? "border-[#F93B1D]" : "border-[#2D3648]"
+        } h-[120px] rounded-lg flex items-center justify-center`}
         onClick={onChooseFile}
       >
         {imgValue ? (

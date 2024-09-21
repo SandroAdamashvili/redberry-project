@@ -9,12 +9,13 @@ export default function AgentSelect({
   data,
   onSelect,
   openModal,
+  error,
+  selectValidation,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState();
 
   function handleSelect(value) {
-    setSelectedValue(value);
+    selectValidation();
     onSelect(inputName, value);
     localStorage.setItem(inputName, value);
     setIsOpen(false);
@@ -34,7 +35,11 @@ export default function AgentSelect({
             e.preventDefault();
             setIsOpen(!isOpen);
           }}
-          className="border border-gray-400 rounded-md h-10 w-full flex items-center justify-between px-3 bg-white text-gray-800 focus:outline-none"
+          className={`border ${
+            error ? "border-[#F93B1D]" : "border-[#808A93]"
+          } ${
+            isOpen ? "rounded-t-md" : "rounded-md"
+          } h-10 w-full flex items-center justify-between px-3 bg-white text-gray-800 focus:outline-none`}
         >
           <span>
             {localStorage.getItem(inputName)
@@ -49,9 +54,9 @@ export default function AgentSelect({
           <img src={DownArrowIcon} alt="down arrow" className="w-4 h-4" />
         </button>
         {isOpen && (
-          <ul className="absolute left-0 w-full border border-gray-400 rounded-md bg-white mt-1 shadow-lg z-10">
+          <ul className="absolute left-0 w-full max-h-[165px] rounded-b-md bg-white border border-[#808A93] shadow-lg z-10 overflow-y-auto">
             <li
-              className="flex items-center p-3 cursor-pointer hover:bg-gray-100"
+              className="flex items-center p-3 cursor-pointer border border-b-[#808A93] hover:bg-gray-100"
               onClick={() => {
                 openModal();
                 setIsOpen(false);
@@ -67,9 +72,7 @@ export default function AgentSelect({
             {data.map((element) => (
               <li
                 key={element.id}
-                className={`flex items-center p-3 cursor-pointer hover:bg-gray-100 ${
-                  selectedValue === element.id ? "bg-gray-200" : ""
-                }`}
+                className="flex items-center p-3 h-[42px] cursor-pointer border border-b-[#808A93] hover:bg-gray-100"
                 onClick={() => handleSelect(element.id)}
               >
                 {element.name}

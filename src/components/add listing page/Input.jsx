@@ -16,19 +16,6 @@ export default function Input({
     localStorage.setItem(inputName, event.target.value);
   }
 
-  function handleFocus() {
-    error = JSON.parse(localStorage.getItem("valueError"));
-    // JSON.parse(localStorage.getItem("valueError"))[inputName] !==
-    //   (null || "") &&
-    //   onValidation(
-    //     inputName,
-    //     JSON.parse(localStorage.getItem("valueError"))[inputName],
-    //     validationFn
-    //   );
-    // console.log("focus mocus");
-    // console.log(error);
-  }
-
   let labelCss = "text-[14px] font-normal flex flex-row gap-1 ";
   let inputCss =
     "border rounded-md h-[42px] w-[384px] focus:outline-none p-[10px] ";
@@ -62,7 +49,6 @@ export default function Input({
           name={inputName}
           className={txtAreaCss}
           onChange={handleChange}
-          // onFocus={handleChange}
           value={
             localStorage.getItem(inputName) === null
               ? ""
@@ -75,7 +61,6 @@ export default function Input({
           name={inputName}
           className={inputCss}
           onChange={handleChange}
-          onFocus={handleFocus}
           value={
             localStorage.getItem(inputName) === null
               ? ""

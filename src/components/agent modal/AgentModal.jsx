@@ -108,20 +108,22 @@ export default function ({ open, closeModal, updateAgents }) {
     event.preventDefault();
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      setAgentInfo((prevValues) => ({
-        ...prevValues,
-        avatar: file,
-      }));
-      let reader = new FileReader();
-      reader.onloadend = function () {
-        const base64String = reader.result;
-        setImgBase64(base64String);
-      };
-      reader.readAsDataURL(event.target.files[0]);
       setAgentError((prevValues) => ({
         ...prevValues,
         avatar: file.size > 1000000 || !file.type.startsWith("image") || null,
       }));
+      if (file.size < 1000000 && file.type.startsWith("image")) {
+        setAgentInfo((prevValues) => ({
+          ...prevValues,
+          avatar: file,
+        }));
+        let reader = new FileReader();
+        reader.onloadend = function () {
+          const base64String = reader.result;
+          setImgBase64(base64String);
+        };
+        reader.readAsDataURL(event.target.files[0]);
+      }
     }
   }
 

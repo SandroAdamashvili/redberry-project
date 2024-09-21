@@ -50,12 +50,14 @@ export default function RealEstateForm({ onBack }) {
     {
       address: "",
       zip_code: null,
-      region: null,
-      city: null,
+      region_id: null,
+      city_id: null,
       price: null,
       area: null,
       bedrooms: null,
       description: "",
+      image: null,
+      agent_id: null,
     }
   );
 
@@ -115,6 +117,29 @@ export default function RealEstateForm({ onBack }) {
   }, [imgBase64]);
 
   async function uploadData(value) {
+    let invalid = false;
+    setValueError(JSON.parse(localStorage.getItem("valueError")));
+    for (const key in valueError) {
+      if (
+        valueError[key] === true ||
+        inputValue[key] === null ||
+        inputValue[key] === "" ||
+        inputValue[key] === "აირჩიე რეგიონი" ||
+        inputValue[key] === "აირჩიე ქალაქი" ||
+        inputValue[key] === "აირჩიე აგენტი"
+      ) {
+        invalid = true;
+        setValueError((prevValues) => ({
+          ...prevValues,
+          [key]: true,
+        }));
+      }
+    }
+
+    if (invalid === true) {
+      return;
+    }
+
     const fd = new FormData();
     for (const key in value) {
       fd.append(key.toString(), value[key]);
@@ -124,6 +149,7 @@ export default function RealEstateForm({ onBack }) {
 
     try {
       await addListing(fd);
+      onClear();
       navigate("/");
     } catch (error) {
       console.error("Error uploading listing data:", error);
@@ -138,11 +164,26 @@ export default function RealEstateForm({ onBack }) {
   }
 
   function handleValueChange(name, value) {
-    localStorage.setItem("valueError", JSON.stringify(valueError));
     localStorage.setItem(name, value);
-    setInputValue((prevValues) => ({
+    setInputValue((prevValues) => {
+      return {
+        ...prevValues,
+        [name]: localStorage.getItem(name),
+      };
+    });
+    localStorage.setItem("valueError", JSON.stringify(valueError));
+    // if (name === "city_id" || name === "region_id" || name === "agent_id") {
+    //   setValueError((prevValues) => ({
+    //     ...prevValues,
+    //     [name]: false,
+    //   }));
+    // }
+  }
+
+  function selectValidation(name) {
+    setValueError((prevValues) => ({
       ...prevValues,
-      [name]: localStorage.getItem(name),
+      [name]: false,
     }));
   }
 
@@ -160,19 +201,25 @@ export default function RealEstateForm({ onBack }) {
     event.preventDefault();
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      setInputValue((prevValues) => ({
+      setValueError((prevValues) => ({
         ...prevValues,
-        image: file,
+        image: file.size > 1000000 || !file.type.startsWith("image") || null,
       }));
-      // localStorage.getItem("image") &&
-      localStorage.setItem("image", file.name);
-      let reader = new FileReader();
-      reader.onloadend = function () {
-        const base64String = reader.result;
-        setImgBase64(base64String);
-        localStorage.setItem("imgBase64", base64String);
-      };
-      reader.readAsDataURL(event.target.files[0]);
+      if (file.size < 1000000 && file.type.startsWith("image")) {
+        setInputValue((prevValues) => ({
+          ...prevValues,
+          image: file,
+        }));
+        // localStorage.getItem("image") &&
+        localStorage.setItem("image", file.name);
+        let reader = new FileReader();
+        reader.onloadend = function () {
+          const base64String = reader.result;
+          setImgBase64(base64String);
+          localStorage.setItem("imgBase64", base64String);
+        };
+        reader.readAsDataURL(event.target.files[0]);
+      }
     }
   }
 
@@ -199,6 +246,36 @@ export default function RealEstateForm({ onBack }) {
 
   function updateAgents(agents) {
     setAgentsData(agents);
+  }
+
+  function onClear() {
+    localStorage.clear();
+    setInputValue({
+      region_id: "აირჩიე რეგიონი",
+      price: "",
+      zip_code: "",
+      area: "",
+      city_id: "აირჩიე ქალაქი",
+      address: "",
+      agent_id: "აირჩიე აგენტი",
+      bedrooms: "",
+      is_rental: 0,
+      image: null,
+      description: "",
+    });
+    setImgBase64(null);
+    setValueError({
+      address: "",
+      zip_code: null,
+      region_id: null,
+      city_id: null,
+      price: null,
+      area: null,
+      bedrooms: null,
+      description: "",
+      image: null,
+      agent_id: null,
+    });
   }
 
   return (
@@ -260,6 +337,8 @@ export default function RealEstateForm({ onBack }) {
               title="რეგიონი"
               data={regionsData}
               onSelect={handleValueChange}
+              error={valueError.region_id}
+              selectValidation={() => selectValidation("region_id")}
             />
             {inputValue.region_id !== "აირჩიე რეგიონი" && (
               <InputSelect
@@ -270,6 +349,8 @@ export default function RealEstateForm({ onBack }) {
                   (city) => city["region_id"] == inputValue.region_id
                 )}
                 onSelect={handleValueChange}
+                error={valueError.city_id}
+                selectValidation={() => selectValidation("city_id")}
               />
             )}
           </div>
@@ -327,6 +408,7 @@ export default function RealEstateForm({ onBack }) {
             onChooseFile={onChooseFile}
             imgValue={imgBase64}
             onRemove={onRemove}
+            error={valueError.image}
           />
         </div>
         <div className="mt-[80px] flex flex-col gap-[22px]">
@@ -339,27 +421,15 @@ export default function RealEstateForm({ onBack }) {
               data={agentsData}
               onSelect={handleValueChange}
               openModal={() => setModalOpen(true)}
+              error={valueError.agent_id}
+              selectValidation={() => selectValidation("agent_id")}
             />
           </div>
         </div>
       </form>
       <div className="mt-[80px] flex flex-row justify-end gap-[15px] mb-[87px]">
         <button
-          onClick={() => {
-            setInputValue({
-              region_id: "აირჩიე რეგიონი",
-              price: "",
-              zip_code: "",
-              area: "",
-              city_id: "აირჩიე ქალაქი",
-              address: "",
-              agent_id: "აირჩიე აგენტი",
-              bedrooms: "",
-              is_rental: 0,
-              image: null,
-              description: "",
-            });
-          }}
+          onClick={onClear}
           className="px-4 py-[10px] border border-[#F93B1D] rounded-[10px] text-[#F93B1D] font-semibold hover:bg-[#F93B1D] hover:text-white"
         >
           გაუქმება

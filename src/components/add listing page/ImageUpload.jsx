@@ -1,9 +1,10 @@
 import { forwardRef } from "react";
 import UploadIcon from "../../assets/icons/plus-circle.svg";
 import RemoveIcon from "../../assets/icons/remove-icon.svg";
+import Tick from "../../assets/icons/tick.svg";
 
 const ImageUpload = forwardRef(function ImageUpload(
-  { handleImgChange, onChooseFile, imgValue, onRemove },
+  { handleImgChange, onChooseFile, imgValue, onRemove, error },
   ref
 ) {
   return (
@@ -24,7 +25,9 @@ const ImageUpload = forwardRef(function ImageUpload(
       )}
 
       <button
-        className="w-full border border-dashed border-[#2D3648] h-[120px] rounded-lg flex items-center justify-center"
+        className={`w-full border border-dashed ${
+          error ? "border-[#F93B1D]" : "border-[#2D3648]"
+        } h-[120px] rounded-lg flex items-center justify-center`}
         onClick={onChooseFile}
       >
         {imgValue ? (
@@ -45,6 +48,15 @@ const ImageUpload = forwardRef(function ImageUpload(
           <img src={UploadIcon} alt="upload icon" />
         )}
       </button>
+      {error && (
+        <label
+          htmlFor="imgUpload"
+          className="text-[14px] font-normal flex flex-row gap-1 text-[#F93B1D]"
+        >
+          <img src={Tick} alt="tick icon" />
+          ატვირთეთ ვალიდური სურათი. სურათი არ უნდა აღემატებოდეს 1mb-ს
+        </label>
+      )}
     </div>
   );
 });
